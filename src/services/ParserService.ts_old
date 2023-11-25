@@ -1,0 +1,31 @@
+export default function parseM3U(m3uContent) {
+    const parsedRecords = [];
+    const lines = m3uContent.split(/\r?\n/).filter(line => line.trim() !== '');
+  
+    let currentRecord = {};
+  
+    for (const line of lines) {
+      if (line.startsWith('#EXTINF:')) {
+        const durationMatch = line.match(/#EXTINF:(-?\d+)\s/);
+        if (durationMatch && durationMatch.length > 1) {
+          currentRecord.duration = parseInt(durationMatch[1]);
+        }
+  
+        const attributes = line.match(/([^=\s]+)="([^"]+)"/g);
+        if (attributes) {
+          for (const attribute of attributes) {
+            const [key, value] = attribute.split('=');
+            const trimmedKey = key.trim();
+            const trimmedValue = value.replace(/"/g, '').trim();
+            currentRecord[trimmedKey] = trimmedValue;
+          }
+        }
+      } else if (line.trim() !== '#EXTM3U' && line.trim() !== '') {
+        currentRecord.link = line.trim();
+        parsedRecords.push({ ...currentRecord });
+        currentRecord = {};
+      }
+    }
+  
+    return parsedRecords;
+  }
