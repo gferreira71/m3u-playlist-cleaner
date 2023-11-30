@@ -5,8 +5,10 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'app',
-      component: () => import('../views/AboutView.vue')
+      component: () => import('../views/UploadView.vue')
+    }, {
+      path: '/:pathMatch(.*)*',
+      redirect: '/',
     }
   ]
 })

@@ -27,3 +27,4 @@ coverage
 *.sln
 *.sw?
 public/examples/playlist_full.m3u
+public/examples/

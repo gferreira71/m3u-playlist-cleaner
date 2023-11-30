@@ -1,0 +1,15 @@
+{
+    "global": {
+        "app_name": "m3u playlist cleaner"
+    },
+    "upload": {
+        "select_file": "Select a file"
+    },
+    "selection": {
+        "download_button": "Download M3U result file"
+    },
+    "form": {
+        "form_title": "Form",
+        "filter_button": "Filter"
+    }
+}

@@ -3,7 +3,7 @@
 http://alink/123/456/01
 #EXTINF:-1 tvg-id="chaine2.fr" tvg-name="chaine2HD" tvg-logo="http://alink/chaine2.png" group-title="FRANCE",Chaine 2
 http://alink/123/456/02
-#EXTINF:-1 tvg-id="canaluno.fr" tvg-name="canalunoHD" tvg-logo="http://alink/canaluno.png" group-title="PORTUGAL",Canal Uno 1
+#EXTINF:-1 tvg-id="canaluno.fr" tvg-name="canaluno, en HD" tvg-logo="http://alink/canaluno.png" group-title="PORTUGAL",Canal Uno 1
 http://alink/123/987/01
 #EXTINF:-1 tvg-id="myseries01e01" tvg-name="myseries01e01" tvg-logo="http://alink/myserie1.png" group-title="My Serie",My Serie s01e01
 http://alink/345/333/01.mkv
