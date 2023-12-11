@@ -1,23 +1,25 @@
 <template>
   <header>
-    <div class="header-left">
-      <span
-        class="app-title"
-        @click="$router.push('/')">
-        m<span class="app-title-three">3</span>u playlist cleaner
-      </span>
-    </div>
-    <div class="header-right">
-      <div class="lang-selector">
-        <div
-        class="lang-flag"
-        @click="changeLang(langEnum.EN)">EN</div>
-        <div
-        class="lang-flag"
-        @click="changeLang(langEnum.FR)">FR</div>
-        <div
-        class="lang-flag"
-        @click="changeLang(langEnum.PT)">PT</div>
+    <div class="header-container container">
+      <div class="header-left">
+        <span
+          class="app-title"
+          @click="$router.push('/')">
+          m<span class="app-title-three">3</span>u playlist cleaner
+        </span>
+      </div>
+      <div class="header-right">
+        <div class="lang-selector">
+          <div
+          class="lang-flag"
+          @click="changeLang(langEnum.EN)">EN</div>
+          <div
+          class="lang-flag"
+          @click="changeLang(langEnum.FR)">FR</div>
+          <div
+          class="lang-flag"
+          @click="changeLang(langEnum.PT)">PT</div>
+        </div>
       </div>
     </div>
   </header>
@@ -74,6 +76,16 @@ header {
   background-color: #fcfcfc;
   border-bottom: 1px solid #e8e8e8;
   padding: 0 20px;
+  position: fixed;
+  z-index: 999;
+  top: 0;
+
+  .header-container {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;
+  }
 
   .header-left {
 
@@ -106,6 +118,7 @@ header {
 main {
   background-color: var(--surface-ground);
   min-height: calc(100vh - 80px);
+  margin-top: 50px;
 }
 
 footer {

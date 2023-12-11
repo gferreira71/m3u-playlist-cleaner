@@ -5,7 +5,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      component: () => import('../views/UploadView.vue')
+      component: () => import('../views/CleanerView.vue')
     }, {
       path: '/:pathMatch(.*)*',
       redirect: '/',

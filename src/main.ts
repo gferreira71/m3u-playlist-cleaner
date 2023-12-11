@@ -1,6 +1,7 @@
-import './assets/main.css';
+import './assets/base.scss';
 import 'primevue/resources/themes/soho-light/theme.css';
 import 'primeicons/primeicons.css';
+import "primeflex/primeflex.css";
 
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
@@ -19,6 +20,7 @@ import Checkbox from 'primevue/checkbox';
 import SelectButton from 'primevue/selectbutton';
 import Button from 'primevue/button';
 import Badge from 'primevue/badge';
+import ProgressBar from 'primevue/progressbar';
 
 const app = createApp(App)
 
@@ -35,6 +37,7 @@ app.component('InputText', InputText);
 app.component('SelectButton', SelectButton);
 app.component('Button', Button);
 app.component('Badge', Badge);
+app.component('ProgressBar', ProgressBar);
 
 app.use(i18n);
 
