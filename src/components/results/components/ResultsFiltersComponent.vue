@@ -1,6 +1,6 @@
 <template>
   <div class="results-filters-component container">
-    <h2>Records filters form</h2>
+    <h2>{{ $t('form.records_filters_form') }}</h2>
     <form
       v-if="recordsFilters"
       class="filters-form"
@@ -9,7 +9,7 @@
 
         <div class="col-4">
           <div class="field">
-            <label for="search_text">Searched text</label>
+            <label for="search_text">{{ $t('form.searched_text') }}</label>
             <InputText
               type="text"
               id="search_text"
@@ -19,7 +19,7 @@
 
         <div class="col-5">
           <div class="field">
-            <label for="search_text_scope">Searched text scope</label>
+            <label for="search_text_scope">{{ $t('form.searched_text_scope') }}</label>
             <div
               id="search_text_scope"
               class="search-text-scope-list">
@@ -39,7 +39,7 @@
 
         <div class="col-3">
           <div class="field">
-            <label for="record_type">Record type</label>
+            <label for="record_type">{{ $t('form.record_type') }}</label>
             <SelectButton
               id="record_type"
               v-model="recordsFilters.scope"

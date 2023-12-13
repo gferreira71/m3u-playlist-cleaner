@@ -1,7 +1,9 @@
 <template>
   <div class="results-table-component container">
-    <h2>Filtered records
-      <span class="filters-count-label">{{ filteredGroupRecordsCount ?? '0' }} record(s)</span>
+    <h2>{{ $t('records_table.filtered_records') }}
+      <span class="filters-count-label">
+        {{ $tc('common_tables.records_count', filteredGroupRecordsCount ?? 0, {count: filteredGroupRecordsCount ?? '0'}) }}
+      </span>
     </h2>
     <DataTable
       :value="filteredGroupRecords"
@@ -18,19 +20,27 @@
 
       <Column expander style="width: 5rem" />
 
-      <Column field="groupTitle" header="Group name"></Column>
-      <Column header="Details">
+      <Column
+        field="groupTitle"
+        :header="$t('common_tables.group_name_column')"
+        ></Column>
+      <Column
+        :header="$t('common_tables.details_column')">
         <template #body="slotProps">
           Records in the group : {{ slotProps.data.records?.length || 0 }}
         </template>
       </Column>
-      <Column field="type" header="Type">
+      <Column
+        field="type"
+        :header="$t('common_tables.type_column')">
         <template #body="slotProps">
           <Badge :value="slotProps.data.type"></Badge>
         </template>
       </Column>
 
-      <template #empty>No result found.</template>
+      <template #empty>
+        {{ $t('records_table.no_result_found') }}
+      </template>
       <template #expansion="slotProps">
 
         <DataTable
@@ -43,7 +53,9 @@
           scrollable
           scrollHeight="300px">
 
-          <template #empty>Nothing to show.</template>
+          <template #empty>´
+            {{ $t('common_tables.nothing_to_show') }}
+          </template>
 
           <Column headerStyle="width: 3rem">
             <template #header>
@@ -73,23 +85,26 @@
             </template>
           </Column>
 
-          <Column field="name" header="Name"></Column>
+          <Column
+            field="name"
+            :header="$t('common_tables.name_column')"></Column>
           <Column header="tvg-name">
             <template #body="row">
               {{ row.data.tvgParameters?.tvgName || '-' }}
             </template>
           </Column>
-          <Column field="groupTitle" header="group-title"></Column>
-          <Column field="type" header="Type">
+          <Column
+            field="groupTitle"
+            header="group-title"></Column>
+          <Column
+            field="type"
+            :header="$t('common_tables.type_column')">
             <template #body="slotProps">
               <Badge :value="slotProps.data.type"></Badge>
             </template>
           </Column>
-
         </DataTable>
-
       </template>
-
     </DataTable>
   </div>
 </template>
@@ -146,7 +161,7 @@ export default defineComponent({
     },
 
     selectAllRecordChanged(event: any, data: GroupedRecords) {
-      recordsStore().toggleGroupedRecordSelection(data);
+      recordsStore().toggleGroupedRecordSelection(data, event.returnValue);
     },
   },
 });

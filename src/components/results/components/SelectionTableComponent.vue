@@ -1,18 +1,21 @@
 <template>
   <div class="selection-table-component container">
-    <h2>Selected records
-      <span class="filters-count-label">{{ selectedGroupRecordsCount ?? '0' }} record(s)</span>
+    <h2>{{ $t('selection_table.selected_records') }}
+      <span class="filters-count-label">
+        {{ $tc('common_tables.records_count', selectedGroupRecordsCount ?? 0, {count: selectedGroupRecordsCount ?? '0'}) }}
+      </span>
     </h2>
+
     <DataTable
-    class="selection-datatable"
-    :value="selectedGroupRecords"
-    v-model:expandedRows="expandedRows"
-    paginator
-    :rows="20"
-    :rowsPerPageOptions="[5, 10, 20, 50]"
-    scrollable
-    scrollHeight="500px">
-    <template #empty>No result selected.</template>
+      class="selection-datatable"
+      :value="selectedGroupRecords"
+      v-model:expandedRows="expandedRows"
+      paginator
+      :rows="20"
+      :rowsPerPageOptions="[5, 10, 20, 50]"
+      scrollable
+      scrollHeight="500px">
+    <template #empty>{{ $t('selection_table.no_result_selected') }}</template>
     
     <Column expander style="width: 5rem" />
     <Column>
@@ -32,13 +35,18 @@
         @click="unselectGroupRecord(slotProps.data)"></Button>
       </template>
     </Column>
-    <Column field="groupTitle" header="Group name"></Column>
-    <Column header="Details">
+    <Column
+      field="groupTitle"
+      :header="$t('common_tables.group_name_column')"></Column>
+    <Column
+      :header="$t('common_tables.details_column')">
       <template #body="slotProps">
         Records in the group : {{ slotProps.data.records?.length || 0 }}
       </template>
     </Column>
-    <Column field="type" header="Type">
+    <Column
+      field="type"
+      :header="$t('common_tables.type_column')">
       <template #body="slotProps">
         <Badge :value="slotProps.data.type"></Badge>
       </template>
@@ -54,9 +62,12 @@
       class="expand-row-table"
       scrollable
       scrollHeight="300px">
-      <template #empty>Nothing to show.</template>
-      <Column headerStyle="width: 3rem">
-        
+
+      <template #empty>
+        {{ $t('common_tables.nothing_to_show') }}
+      </template>
+
+      <Column headerStyle="width: 3rem">  
         <template #body="slotProps">
           <Button
           icon="pi pi-trash"
@@ -66,7 +77,8 @@
         </template>
       </Column>
       
-      <Column header="tvg-logo">
+      <Column
+        header="tvg-logo">
         <template #body="row">
           <img v-if="row.data.tvgParameters?.tvgLogo"
           :src="row.data.tvgParameters?.tvgLogo"
@@ -75,10 +87,18 @@
         </template>
       </Column>
       
-      <Column field="name" header="Name"></Column>
-      <Column field="tvgName" header="tvg-name"></Column>
-      <Column field="groupTitle" header="group-title"></Column>
-      <Column field="type" header="Type">
+      <Column
+        field="name"
+        :header="$t('common_tables.name_column')"></Column>
+      <Column
+        field="tvgName"
+        header="tvg-name"></Column>
+      <Column
+        field="groupTitle"
+        header="group-title"></Column>
+      <Column
+        field="type"
+        :header="$t('common_tables.type_column')">
         <template #body="slotProps">
           <Badge :value="slotProps.data.type"></Badge>
         </template>

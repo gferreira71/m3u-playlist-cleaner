@@ -2,14 +2,43 @@
     "global": {
         "app_name": "m3u playlist cleaner"
     },
-    "upload": {
-        "select_file": "Select a file"
-    },
-    "selection": {
-        "download_button": "Download M3U result file"
+    "source": {
+        "source_file": "Source file",
+        "select_file": "Select a file",
+        "demo_file": "Demo file",
+        "file_uploaded": "File uploaded",
+        "download_progress": "Download progress : {progress}",
+        "upload_progress": "Uploading progress : {progress}",
+        "parsing_progress": "Parsing progress : {progress}",
+        "btn_clear_source": "Clear source"
     },
     "form": {
+        "records_filters_form": "Records filters form",
         "form_title": "Form",
+        "searched_text": "Searched text",
+        "searched_text_scope": "Searched text scope",
+        "record_type": "Record type",
         "filter_button": "Apply filter"
+    },
+    "records_table": {
+        "filtered_records": "Filtered records",
+        "no_result_found": "No result found."
+    },
+    "selection_table": {
+        "selected_records": "Selected records",
+        "no_result_selected": "No result selected."
+    },
+    "download_playlist": {
+        "download_new_playlist": "Download new playlist",
+        "new_file_name": "New file name",
+        "download_button": "Download M3U result file"
+    },
+    "common_tables": {
+        "records_count": "No record | {count} record | {count} records",
+        "name_column": "Name",
+        "group_name_column": "Group name",
+        "details_column": "Details",
+        "type_column": "Type",
+        "nothing_to_show": "Nothing to show."
     }
 }

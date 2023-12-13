@@ -137,45 +137,58 @@ export const recordsStore = defineStore('recordsStore', {
       this.selectedGroupRecords = [];
     },
 
-    toggleGroupedRecordSelection(groupedRecord: GroupedRecords): void {
+    toggleGroupedRecordSelection(groupedRecord: GroupedRecords, stateToSet: boolean): void {
+      const clonedGroupedRecord: GroupedRecords = { ...groupedRecord};
       const index = this.selectedGroupRecords.findIndex(
         (selectedGroupRecord) => selectedGroupRecord.groupTitle === groupedRecord.groupTitle
       );
-
       if (index === -1) {
-        this.selectedGroupRecords = [...this.selectedGroupRecords, groupedRecord];
+        this.selectedGroupRecords = [...this.selectedGroupRecords, clonedGroupedRecord];
       } else {
         const updatedGroupedRecords = [...this.selectedGroupRecords];
-        updatedGroupedRecords.splice(index, 1);
+        if(!stateToSet) {
+          updatedGroupedRecords.splice(index, 1);
+        } else {
+          updatedGroupedRecords[index].records = [...groupedRecord.records];
+        }
         this.selectedGroupRecords = updatedGroupedRecords;
       }
     },
 
-    toggleRecordSelection(record: Record): void {
+    toggleRecordSelection(record: Record) {
       const existingGroupIndex = this.selectedGroupRecords.findIndex(
         (groupedRecord) => groupedRecord.groupTitle === record.groupTitle
       );
     
       if (existingGroupIndex === -1) {
-        const newGroupedRecord: GroupedRecords = {
+        // Add new grouped record
+        const newGroupedRecord = {
           groupTitle: record.groupTitle ?? 'NO GROUP',
           type: RecordUtils.computeGroupRecordsType([record]),
           records: [record],
         };
         this.selectedGroupRecords = [...this.selectedGroupRecords, newGroupedRecord];
       } else {
+        // Clone the existing grouped records
         const updatedGroupedRecords = [...this.selectedGroupRecords];
         const existingGroupedRecord = { ...updatedGroupedRecords[existingGroupIndex] };
+    
+        // Find the index of the existing record
         const existingRecordIndex = existingGroupedRecord.records.findIndex(
           (selectedRecord) => selectedRecord.name === record.name
         );
     
         if (existingRecordIndex === -1) {
+          // Add new record to existing grouped record
           existingGroupedRecord.records = [...existingGroupedRecord.records, record];
         } else {
-          existingGroupedRecord.records.splice(existingRecordIndex, 1);
+          // Remove the existing record from the grouped record
+          existingGroupedRecord.records = existingGroupedRecord.records.filter(
+            (selectedRecord, index) => index !== existingRecordIndex
+          );
         }
     
+        // Update the grouped record in the array
         if (existingGroupedRecord.records.length > 0) {
           updatedGroupedRecords[existingGroupIndex] = existingGroupedRecord;
         } else {
@@ -193,14 +206,13 @@ export const recordsStore = defineStore('recordsStore', {
     },
 
     removeRecordSelection(recordToRemove: Record) {
-      const updatedSelectedGroupRecords = [...this.selectedGroupRecords];
-      updatedSelectedGroupRecords.forEach((selectedGroupRecord) => {
+      this.selectedGroupRecords.forEach((selectedGroupRecord) => {
         if (selectedGroupRecord.records.some((selectedRecord) => selectedRecord.name === recordToRemove.name)) {
           const updatedRecords = selectedGroupRecord.records.filter((selectedRecord) => selectedRecord.name !== recordToRemove.name);
           selectedGroupRecord.records = updatedRecords;
         }
       });
-      this.selectedGroupRecords = updatedSelectedGroupRecords.filter((selectedGroupRecord) => selectedGroupRecord.records.length > 0);
+      this.selectedGroupRecords = this.selectedGroupRecords.filter((selectedGroupRecord) => selectedGroupRecord.records.length > 0);
     },
 
     downloadPlaylist(filename: string) {

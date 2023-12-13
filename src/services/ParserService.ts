@@ -245,6 +245,16 @@ function downloadFileFromUrl(url: string, progressCallback: Function): Promise<F
   });
 }
 
+async function getDemoFile(fileName: string): Promise<File> {
+  try {
+    const response = await fetch(`examples/${fileName}`);
+    const blob = await response.blob();
+    const file = new File([blob], fileName, { type: 'application/x-mpegURL' });
+    return file;
+  } catch (error) {
+    throw new Error(`Error fetching the file: ${error}`);
+  }
+}
 function downloadM3uResults(records: Record[], filename: string) {
   let m3uContent = '#EXTM3U\n';
 
@@ -278,4 +288,4 @@ function downloadM3uResults(records: Record[], filename: string) {
   link.click();
 }
 
-export default {parseM3UFile, downloadM3uResults, downloadFileFromUrl}
+export default {parseM3UFile, downloadM3uResults, getDemoFile, downloadFileFromUrl}

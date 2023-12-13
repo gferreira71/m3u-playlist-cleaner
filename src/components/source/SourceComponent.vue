@@ -1,29 +1,33 @@
 <template>
   <div class="source-component container">
-    <h2>Source file</h2>
+    <h2>{{ $t('source.source_file') }}</h2>
     <div v-if="!source">
       <div class="upload-section">
         <FileUpload
-          :chooseLabel="$t('upload.select_file')"
+          :chooseLabel="$t('source.select_file')"
           :customUpload="true"
           :auto="true"
           :multiple="false"
           mode="basic"
           @uploader="fileUploader($event)" />
+        <Button
+          :label="$t('source.demo_file')"
+          @click="uploadDemoFile()" />
       </div>
     </div>
 
     <div v-else
       class="source-infos">
       <div class="current-source">
-        <span class="current-file-label">File uploaded</span> : {{ source.fileName }}
+        <span class="current-file-label">
+          {{ $t('source.file_uploaded') }}</span> : {{ source.fileName }}
       </div>
       <div v-if="progressStatus"
         class="process-progress">
         <div v-if="progressStatus.downloadProgress"
           class="progress-row">
           <span id="download_status">
-            Download progress : {{ progressStatus.downloadProgressStatus?.valueOf() }}
+            {{ $t('source.download_progress', {progress: progressStatus.downloadProgressStatus?.valueOf()}) }}
           </span>
           <ProgressBar
             :value="progressStatus.downloadProgress"
@@ -32,7 +36,7 @@
         <div v-if="progressStatus.uploadProgress"
           class="progress-row">
           <span id="upload_status">
-            Upload progress : {{ progressStatus.uploadProgressStatus?.valueOf() }}
+            {{ $t('source.upload_progress', {progress: progressStatus.uploadProgressStatus?.valueOf()}) }}
           </span>
           <ProgressBar
             :value="progressStatus.uploadProgress"
@@ -41,7 +45,7 @@
         <div v-if="progressStatus.parseProgress"
           class="progress-row">
           <span id="parse_status">
-            Parsing progress : {{ progressStatus.parseProgressStatus?.valueOf() }}
+            {{ $t('source.parsing_progress', {progress: progressStatus.parseProgressStatus?.valueOf()}) }}
           </span>
           <ProgressBar
             :value="progressStatus.parseProgress"
@@ -51,7 +55,7 @@
 
       <div>
         <Button
-          label="Clear source"
+          :label="$t('source.btn_clear_source')"
           @click="clearSource()"></Button>
       </div>
     </div>
@@ -64,6 +68,7 @@ import type { FileUploadUploaderEvent } from "primevue/fileupload";
 import { defineComponent } from 'vue';
 import { type Source, SourceTypeEnum } from "../../types/SourcesTypes";
 import { recordsStore } from './../../stores/recordsStore';
+import ParserService from "@/services/ParserService";
 
 export default defineComponent({
   data() {
@@ -93,6 +98,22 @@ export default defineComponent({
         // TODO:handle the error
         console.log('Please upload a file with .m3u or .m3u8 extension.');
       }
+    },
+
+    uploadDemoFile() {
+      const demoFileName = 'file_example.m3u';
+      ParserService.getDemoFile(demoFileName)
+      .then((file) => {
+        const demoSource: Source = {
+          type: SourceTypeEnum.DEMO,
+          fileName: demoFileName,
+          value: file
+        };
+      recordsStore()?.changeSource(demoSource);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
     },
 
     clearSource() {
