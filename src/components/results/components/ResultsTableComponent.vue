@@ -19,7 +19,7 @@
       class="results-datatable">
 
       <Column expander style="width: 5rem">
-        <template #header>
+        <template #header v-if="false"> <!-- TODO -->
           <input
             type="checkbox"
             class="input-checkbox"

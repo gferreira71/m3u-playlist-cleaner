@@ -57,7 +57,7 @@
       <div v-if="!isOnProcessing"
         class="processing-result">
         <table class="processing-results-table">
-          <tr>
+          <tr v-if="records?.length !== 0">
             <th>
               {{ $t('source.parsing_result.records_count') }}
             </th>
@@ -65,23 +65,23 @@
               {{ records?.length }}
             </td>
           </tr>
-          <tr>
+          <tr v-if="mediaRecordsCount !== 0">
             <th>
               {{ $t('source.parsing_result.media_count') }}
-            </th>
-            <td>
-              {{ liveRecordsCount }}
-            </td>
-          </tr>
-          <tr>
-            <th>
-              {{ $t('source.parsing_result.live_count') }}
             </th>
             <td>
               {{ mediaRecordsCount }}
             </td>
           </tr>
-          <tr>
+          <tr v-if="liveRecordsCount !== 0">
+            <th>
+              {{ $t('source.parsing_result.live_count') }}
+            </th>
+            <td>
+              {{ liveRecordsCount }}
+            </td>
+          </tr>
+          <tr v-if="vodRecordsCount !== 0">
             <th>
               {{ $t('source.parsing_result.vod_count') }}
             </th>
