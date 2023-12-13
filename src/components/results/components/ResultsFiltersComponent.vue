@@ -52,14 +52,25 @@
         </div>
       </div>
 
-      <div class="col-12">
-        <Button
-          class="col-4"
-          type="submit"
-          icon="pi pi-filter"
-          :disabled="isFilteringRunning"
-          :label="$t('form.filter_button')">
-        </Button>
+      <div class="col-12 grid">
+        <div class="col-4">
+          <Button
+            type="submit"
+            icon="pi pi-filter"
+            class="button-full-width"
+            :disabled="isFilteringRunning"
+            :label="$t('form.filter_button')">
+          </Button>
+        </div>
+
+        <div class="col-4">
+          <Button
+            @click="resetFilters()"
+            class="button-full-width"
+            :disabled="!isFilterDirty"
+            :label="$t('form.reset_filters')">
+          </Button>
+        </div>
       </div>
     </form>
   </div>
@@ -70,7 +81,7 @@ import { defineComponent } from 'vue';
 import { mapState } from 'pinia'
 import { recordsStore } from './../../../stores/recordsStore';
 import { RecordTypeEnum } from '@/types/RecordsTypes';
-import { ScopeTextEnum } from '@/types/RecordsFiltersTypes';
+import { ScopeTextEnum, type RecordsFitlers } from '@/types/RecordsFiltersTypes';
 
 export default defineComponent({
   data() {
@@ -99,10 +110,23 @@ export default defineComponent({
   },
   computed: {
     ...mapState(recordsStore, ['recordsFilters', 'isFilteringRunning']),
+
+    isFilterDirty(): boolean {
+      const textDirty = this.recordsFilters?.text.trim() !== '';
+      const scopeDirty = this.recordsFilters?.scope?.length !== 3;
+      const typeDirty = this.recordsFilters?.scopeText?.length !== 2 ||
+        (!this.recordsFilters?.scopeText.some(scope => scope === ScopeTextEnum.GROUPTITLE)) ||
+        (!this.recordsFilters?.scopeText.some(scope => scope === ScopeTextEnum.NAME));
+      return textDirty || scopeDirty || typeDirty;
+    }
   },
   created() { },
   methods: {
     handleFilter() {
+      recordsStore()?.applyFilters();
+    },
+    resetFilters() {
+      recordsStore()?.resetFilters();
       recordsStore()?.applyFilters();
     }
   },
@@ -116,6 +140,10 @@ export default defineComponent({
     border: 1px solid #dbdbdb;
     padding: 8px;
     border-radius: 4px;
+  }
+
+  .button-full-width {
+    width: 100%;
   }
 
   .search-text-scope-list {

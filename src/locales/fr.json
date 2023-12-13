@@ -2,11 +2,43 @@
     "global": {
         "app_name": "m3u playlist cleaner"
     },
-    "upload": {
-        "select_file": "Envoyer un fichier"
+    "source": {
+        "source_file": "Fichier source",
+        "select_file": "Sélectionner un fichier",
+        "demo_file": "Fichier démo",
+        "file_uploaded": "Fichié envoyé",
+        "download_progress": "Progression du téléchargement : {progress}",
+        "upload_progress": "Progression de l'envoi : {progress}",
+        "parsing_progress": "Progression du traitement : {progress}",
+        "btn_clear_source": "Réinitialiser la source"
     },
     "form": {
-        "form_title": "Form",
-        "filter_button": "Filter"
+        "records_filters_form": "Formulaire de filtrage des enregistrements",
+        "searched_text": "Text recherché",
+        "searched_text_scope": "Portée du text recherché",
+        "record_type": "Type d'enregistrement",
+        "filter_button": "Appliquer les filtres",
+        "reset_filters": "Réinitialiser les filtres"
+    },
+    "records_table": {
+        "filtered_records": "Enregistrement filtré",
+        "no_result_found": "Aucun résultat trouvé."
+    },
+    "selection_table": {
+        "selected_records": "Enregistrement sélectionné",
+        "no_result_selected": "Aucun résultat sélectionné."
+    },
+    "download_playlist": {
+        "download_new_playlist": "Télecharger la nouvelle playlist",
+        "new_file_name": "Nom du nouveau fichier",
+        "download_button": "Télecharger le fichier M3U"
+    },
+    "common_tables": {
+        "records_count": "Aucun enregistrement | {count} enregistrement | {count} enregistrements",
+        "name_column": "Nom",
+        "group_name_column": "Nom du groupe",
+        "details_column": "Détail",
+        "type_column": "Type",
+        "nothing_to_show": "Rien à afficher."
     }
 }

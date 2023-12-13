@@ -18,7 +18,16 @@
       scrollHeight="500px"
       class="results-datatable">
 
-      <Column expander style="width: 5rem" />
+      <Column expander style="width: 5rem">
+        <template #header>
+          <input
+            type="checkbox"
+            class="input-checkbox"
+            :checked="areAllFilteredRecordsSelected()"
+            @change="selectAllFilteredRecordChanged($event)"
+          />
+        </template>
+      </Column>
 
       <Column
         field="groupTitle"
@@ -53,7 +62,7 @@
           scrollable
           scrollHeight="300px">
 
-          <template #empty>´
+          <template #empty>
             {{ $t('common_tables.nothing_to_show') }}
           </template>
 
@@ -154,6 +163,16 @@ export default defineComponent({
       return this.selectedGroupRecords.some(groupedRecord =>
         groupedRecord.records.some(selectedRecord => selectedRecord.name === record.name)
       );
+    },
+
+    areAllFilteredRecordsSelected() {
+      // TODO
+      return false;
+    },
+
+    selectAllFilteredRecordChanged(event: any) {
+      // TODO
+      return;
     },
 
     selectRecordChanged(event: any, data: Record) {

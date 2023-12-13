@@ -12,6 +12,7 @@
           @uploader="fileUploader($event)" />
         <Button
           :label="$t('source.demo_file')"
+          class="demo-button"
           @click="uploadDemoFile()" />
       </div>
     </div>
@@ -22,7 +23,7 @@
         <span class="current-file-label">
           {{ $t('source.file_uploaded') }}</span> : {{ source.fileName }}
       </div>
-      <div v-if="progressStatus"
+      <div v-if="progressStatus && isOnProcessing"
         class="process-progress">
         <div v-if="progressStatus.downloadProgress"
           class="progress-row">
@@ -53,6 +54,44 @@
         </div>
       </div>
 
+      <div v-if="!isOnProcessing"
+        class="processing-result">
+        <table class="processing-results-table">
+          <tr>
+            <th>
+              {{ $t('source.parsing_result.records_count') }}
+            </th>
+            <td>
+              {{ records?.length }}
+            </td>
+          </tr>
+          <tr>
+            <th>
+              {{ $t('source.parsing_result.media_count') }}
+            </th>
+            <td>
+              {{ liveRecordsCount }}
+            </td>
+          </tr>
+          <tr>
+            <th>
+              {{ $t('source.parsing_result.live_count') }}
+            </th>
+            <td>
+              {{ mediaRecordsCount }}
+            </td>
+          </tr>
+          <tr>
+            <th>
+              {{ $t('source.parsing_result.vod_count') }}
+            </th>
+            <td>
+              {{ vodRecordsCount }}
+            </td>
+          </tr>
+        </table>
+      </div>
+
       <div>
         <Button
           :label="$t('source.btn_clear_source')"
@@ -69,13 +108,29 @@ import { defineComponent } from 'vue';
 import { type Source, SourceTypeEnum } from "../../types/SourcesTypes";
 import { recordsStore } from './../../stores/recordsStore';
 import ParserService from "@/services/ParserService";
+import { RecordTypeEnum } from "@/types/RecordsTypes";
 
 export default defineComponent({
   data() {
       return { }
   },
   computed: {
-    ...mapState(recordsStore, ['source', 'progressStatus']),
+    ...mapState(recordsStore,
+      ['source',
+      'progressStatus',
+      'groupedRecords',
+      'records',
+      'isOnProcessing']),
+
+    liveRecordsCount(): number {
+      return this.records?.filter(record => record.type === RecordTypeEnum.LIVE).length;
+    },
+    mediaRecordsCount(): number {
+      return this.records?.filter(record => record.type === RecordTypeEnum.MEDIA).length;
+    },
+    vodRecordsCount(): number {
+      return this.records?.filter(record => record.type === RecordTypeEnum.VOD).length;
+    }
   },
   created() {},
   methods: {
@@ -126,6 +181,14 @@ export default defineComponent({
 <style lang="scss" scoped>
 .source-component {
   padding-top: 24px;
+
+  .upload-section {
+    display: inline-flex;
+    .demo-button {
+      margin-left: 8px;
+    }
+  }
+
   .source-infos {
     background: white;
     padding: 18px;
@@ -143,6 +206,18 @@ export default defineComponent({
 
   .process-progress {
     padding: 18px 0;
+  }
+
+  .processing-results-table {
+    th {
+      font-weight: 500;
+      text-align: left;
+      width: 300px;
+    }
+  }
+
+  .processing-result {
+    padding: 12px 4px;
   }
 }
 </style>

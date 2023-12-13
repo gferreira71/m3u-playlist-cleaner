@@ -12,6 +12,7 @@ import RecordUtils from '@/utils/RecordUtils';
 
 export interface RecordStoreState {
   source?: Source;
+  isOnProcessing: boolean;
   progressStatus?: ProgressStatus;
   recordsFilters: RecordsFitlers;
   records: Record[];
@@ -24,6 +25,7 @@ export interface RecordStoreState {
 export const recordsStore = defineStore('recordsStore', {
   state: (): RecordStoreState => ({
     source: undefined,
+    isOnProcessing: false,
     progressStatus: undefined,
     recordsFilters: {
       text: '',
@@ -31,7 +33,6 @@ export const recordsStore = defineStore('recordsStore', {
       scopeText: [ScopeTextEnum.GROUPTITLE, ScopeTextEnum.NAME]
     },
     records: [],
-    // recordsFiltered: [],
     groupedRecords: [],
     filteredGroupRecords: [],
     selectedGroupRecords: [],
@@ -43,6 +44,7 @@ export const recordsStore = defineStore('recordsStore', {
   actions: {
     async changeSource(newSource: Source) {
       this.source = newSource;
+      this.isOnProcessing = true;
       if(this.source !== newSource) {
         let fileToParse: File;
         // Init progressStatus
@@ -97,6 +99,7 @@ export const recordsStore = defineStore('recordsStore', {
             }
           }
         });
+        this.isOnProcessing = false;
         this.records = recordsFound;
         this.groupedRecords = GroupRecordService.groupRecords(recordsFound);
         this.filteredGroupRecords = GroupRecordService.groupRecords(recordsFound);
@@ -220,6 +223,15 @@ export const recordsStore = defineStore('recordsStore', {
         const selectedRecords = this.selectedGroupRecords.flatMap(groupedRecord => groupedRecord.records);
         ParserService.downloadM3uResults(selectedRecords, filename);
       }
+    },
+
+    resetFilters() {
+      this.recordsFilters = {
+        text: '',
+        scope: [RecordTypeEnum.LIVE, RecordTypeEnum.MEDIA, RecordTypeEnum.VOD],
+        scopeText: [ScopeTextEnum.GROUPTITLE, ScopeTextEnum.NAME]
+      };
+      
     }
   },
 });
