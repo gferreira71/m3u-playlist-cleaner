@@ -28,11 +28,13 @@
     },
     "records_table": {
         "filtered_records": "Filtered records",
-        "no_result_found": "No result found."
+        "no_result_found": "No result found.",
+        "details_content": "Records: {recordsCount} - Selected: {selectedCount}"
     },
     "selection_table": {
         "selected_records": "Selected records",
-        "no_result_selected": "No result selected."
+        "no_result_selected": "No result selected.",
+        "details_content": "Records: {recordsCount}"
     },
     "download_playlist": {
         "download_new_playlist": "Download new playlist",

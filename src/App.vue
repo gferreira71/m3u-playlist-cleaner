@@ -118,7 +118,7 @@ header {
 main {
   background-color: var(--surface-ground);
   min-height: calc(100vh - 80px);
-  margin-top: 50px;
+  padding-top: 50px;
 }
 
 footer {

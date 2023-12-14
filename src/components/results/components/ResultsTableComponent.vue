@@ -13,13 +13,13 @@
       paginator
       :rows="20"
       :rowsPerPageOptions="[5, 10, 20, 50]"
-      :row-class="expandRowClass"
+      :row-class="resultTableRowClass"
       scrollable
       scrollHeight="500px"
       class="results-datatable">
 
       <Column expander style="width: 5rem">
-        <template #header v-if="false"> <!-- TODO -->
+        <template #header>
           <input
             type="checkbox"
             class="input-checkbox"
@@ -28,7 +28,6 @@
           />
         </template>
       </Column>
-
       <Column
         field="groupTitle"
         :header="$t('common_tables.group_name_column')"
@@ -36,7 +35,10 @@
       <Column
         :header="$t('common_tables.details_column')">
         <template #body="slotProps">
-          Records in the group : {{ slotProps.data.records?.length || 0 }}
+          {{ $t('records_table.details_content', {
+            recordsCount: slotProps.data.records?.length || 0,
+            selectedCount: getRecordSelectedCount(slotProps.data.records)
+          }) }}
         </template>
       </Column>
       <Column
@@ -58,6 +60,7 @@
           paginator
           :rows="20"
           :rowsPerPageOptions="[5, 10, 20, 50]"
+          :row-class="recordsTableRowClass"
           class="expand-row-table"
           scrollable
           scrollHeight="300px">
@@ -86,11 +89,17 @@
             </template>
           </Column>
 
-          <Column header="tvg-logo">
+          <Column
+            header="tvg-logo"
+            style="width: 80px">
             <template #body="row">
               <img v-if="row.data.tvgParameters?.tvgLogo"
                 :src="row.data.tvgParameters?.tvgLogo"
                 class="tvg-logo-picture"/>
+                <div v-else
+                  class="no-logo-symbol">
+                  ?
+                </div>
             </template>
           </Column>
 
@@ -146,8 +155,23 @@ export default defineComponent({
   },
   created() { },
   methods: {
-    expandRowClass(rowData: any): string {
-      return rowData.records ? "" : "no-expander";
+    resultTableRowClass(rowData: any): string {
+      let clazz = '';
+      if(!rowData.records) clazz += 'no-expander';
+      if(this.isGroupedRecordSelected(rowData)) {
+        clazz += 'row-highlighted-full';
+      } else if(this.isGroupedRecordPartiallySelected(rowData)) {
+        clazz += 'row-highlighted-partial';
+      }
+      return clazz;
+    },
+
+    recordsTableRowClass(rowData: any): string {
+      let clazz = '';
+      if(this.isRecordSelected(rowData)) {
+        clazz += 'row-highlighted-full';
+      }
+      return clazz;
     },
 
     isGroupedRecordSelected(groupedRecord: GroupedRecords) {
@@ -155,6 +179,15 @@ export default defineComponent({
         selectedGroupRecord => selectedGroupRecord.records
       );
       return groupedRecord.records.every(record =>
+        selectedRecords.includes(record)
+      );
+    },
+
+    isGroupedRecordPartiallySelected(groupedRecord: GroupedRecords) {
+      const selectedRecords = this.selectedGroupRecords.flatMap(
+        selectedGroupRecord => selectedGroupRecord.records
+      );
+      return groupedRecord.records.some(record =>
         selectedRecords.includes(record)
       );
     },
@@ -170,6 +203,15 @@ export default defineComponent({
       return false;
     },
 
+    getRecordSelectedCount(records: Record[]) {
+      const selectedRecords: Record[] = this.selectedGroupRecords.flatMap(
+        selectedGroupRecord => selectedGroupRecord.records
+      );
+      return records.filter(record =>
+        selectedRecords.includes(record)
+      ).length;
+    },
+
     selectAllFilteredRecordChanged(event: any) {
       // TODO
       return;
@@ -180,7 +222,7 @@ export default defineComponent({
     },
 
     selectAllRecordChanged(event: any, data: GroupedRecords) {
-      recordsStore().toggleGroupedRecordSelection(data, event.returnValue);
+      recordsStore().toggleGroupedRecordSelection(data, event.target.checked);
     },
   },
 });
@@ -215,6 +257,26 @@ export default defineComponent({
   .input-checkbox {
     width: 16px;
     height: 16px;
+  }
+
+  :deep(tr.row-highlighted-full) {
+    background-color: #e2dcfc !important;
+  }
+
+  :deep(.row-highlighted-partial) {
+    background-color: #f8f6ff !important;
+  }
+
+  .no-logo-symbol {
+    width: 22px;
+    height: 22px;
+    border: 1px solid transparent;
+    background-color: #7254f3;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 </style>

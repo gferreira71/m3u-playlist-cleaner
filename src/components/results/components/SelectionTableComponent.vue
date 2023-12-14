@@ -41,7 +41,7 @@
     <Column
       :header="$t('common_tables.details_column')">
       <template #body="slotProps">
-        Records in the group : {{ slotProps.data.records?.length || 0 }}
+        {{ $t('selection_table.details_content', {recordsCount: slotProps.data.records?.length || 0}) }}
       </template>
     </Column>
     <Column
@@ -78,21 +78,28 @@
       </Column>
       
       <Column
-        header="tvg-logo">
+        header="tvg-logo"
+        style="width: 80px">
         <template #body="row">
           <img v-if="row.data.tvgParameters?.tvgLogo"
-          :src="row.data.tvgParameters?.tvgLogo"
-          :alt="`Logo for ${row.data.tvgParameters?.tvgName}`"
-          class="tvg-logo-picture"/>
+            :src="row.data.tvgParameters?.tvgLogo"
+            :alt="`Logo for ${row.data.tvgParameters?.tvgName}`"
+            class="tvg-logo-picture"/>
+          <div v-else
+            class="no-logo-symbol">
+            ?
+          </div>
         </template>
       </Column>
       
       <Column
         field="name"
         :header="$t('common_tables.name_column')"></Column>
-      <Column
-        field="tvgName"
-        header="tvg-name"></Column>
+      <Column header="tvg-name">
+        <template #body="row">
+          {{ row.data.tvgParameters?.tvgName || '-' }}
+        </template>
+      </Column> 
       <Column
         field="groupTitle"
         header="group-title"></Column>
@@ -163,6 +170,18 @@ export default defineComponent({
   .tvg-logo-picture {
     width: auto;
     height: 30px;
+  }
+
+  .no-logo-symbol {
+    width: 22px;
+    height: 22px;
+    border: 1px solid transparent;
+    background-color: #7254f3;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
   .expand-row-table {
