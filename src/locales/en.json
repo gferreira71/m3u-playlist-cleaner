@@ -15,7 +15,28 @@
             "records_count": "Number of records",
             "media_count": "Number of media",
             "live_count": "Number of live",
-            "vod_count": "Number of VOD"
+            "vod_count": "Number of VOD",
+            "warning": "Warning: {count} issue found on the file | Warning: {count} issues found on the file",
+            "error": "Error",
+            "error_key": {
+                "WRONG_M3U_HEADER": "Wrong M3U header",
+                "WRONG_FILE_EXTENSION": "Wrong file extension",
+                "WRONG_FILE_SIGNATURE": "Wrong file signature",
+                "FILE_TOO_BIG": "File too big (limit 1Go)",
+                "READING_FILE_ERROR": "Error during the file reading",
+                "PARSING_FILE_ERROR": "Error during the file parsing",
+                "UNKNOWN_ERROR": "Unknown error"
+            },
+            "warning_key": {
+                "UNSUPPORTED_HLS_TAG": "Unsupported HLS tag",
+                "UNSUPPORTED_XM3U_TAG": "Unsupported XM3U tag",
+                "UNKNOWN_TAG": "Unknown tag",
+                "NO_LINK_RECORD": "No link found for the record",
+                "NO_NAME_RECORD": "No name found for the record",
+                "NO_DURATION_RECORD": "No duration found for the record"
+            },
+            "error_line": "Line {line}: ",
+            "warning_line": "Line {line}: "
         }
     },
     "form": {

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { type Source } from './../types/SourcesTypes';
+import { type Error } from './../types/ErrorTypes';
 import ParserService from '@/services/ParserService';
 import FiltersService from '@/services/FiltersService';
 import { ProgressStatusEnum, type ProgressStatus, ProgressStatusState } from '@/types/ProgressStatusTypes';
@@ -9,6 +10,9 @@ import { ParsingStateEnum, type ParsingProcessState } from '@/types/ParsingProce
 import type { GroupedRecords } from '@/types/GroupedRecordsTypes';
 import GroupRecordService from '@/services/GroupRecordService';
 import RecordUtils from '@/utils/RecordUtils';
+import type { Warning } from '@/types/WarningTypes';
+import type { ParsingResult } from '@/types/ParsingResultTypes';
+import { toRaw } from 'vue';
 
 export interface RecordStoreState {
   source?: Source;
@@ -16,6 +20,8 @@ export interface RecordStoreState {
   progressStatus?: ProgressStatus;
   recordsFilters: RecordsFitlers;
   records: Record[];
+  errors: Error[];
+  warnings: Warning[];
   groupedRecords: GroupedRecords[];
   filteredGroupRecords: GroupedRecords[];
   selectedGroupRecords: GroupedRecords[];
@@ -32,6 +38,8 @@ export const recordsStore = defineStore('recordsStore', {
       scope: [RecordTypeEnum.LIVE, RecordTypeEnum.MEDIA, RecordTypeEnum.VOD],
       scopeText: [ScopeTextEnum.GROUPTITLE, ScopeTextEnum.NAME]
     },
+    errors: [],
+    warnings: [],
     records: [],
     groupedRecords: [],
     filteredGroupRecords: [],
@@ -74,7 +82,7 @@ export const recordsStore = defineStore('recordsStore', {
           fileToParse = newSource.value as File;
         }*/
         fileToParse = newSource.value as File;
-        const recordsFound: Record[] = await ParserService.parseM3UFile(fileToParse, (parsingProcessState: ParsingProcessState) => {
+        const parsingResult: ParsingResult = await ParserService.parseM3UFile(fileToParse, (parsingProcessState: ParsingProcessState) => {
           // If error
           if(parsingProcessState.error && this.progressStatus) {
             this.progressStatus.error = {
@@ -100,9 +108,11 @@ export const recordsStore = defineStore('recordsStore', {
           }
         });
         this.isOnProcessing = false;
-        this.records = recordsFound;
-        this.groupedRecords = GroupRecordService.groupRecords(recordsFound);
-        this.filteredGroupRecords = GroupRecordService.groupRecords(recordsFound);
+        this.records = parsingResult.records;
+        this.warnings = parsingResult.warnings;
+        this.errors = parsingResult.errors;
+        this.groupedRecords = GroupRecordService.groupRecords(parsingResult.records);
+        this.filteredGroupRecords = GroupRecordService.groupRecords(parsingResult.records);
         this.selectedGroupRecords = [];
         // Reset filters and filteredRecords array
         this.recordsFilters = {
@@ -113,8 +123,17 @@ export const recordsStore = defineStore('recordsStore', {
       }
     },
 
+    changeSourceWithErrors(newSource: Source, error: Error) {
+      this.source = newSource;
+      this.isOnProcessing = false;
+      this.errors = [error];
+      this.records = [];
+    },
+
     clearSource() {
       this.records = [];
+      this.errors = [];
+      this.warnings = [];
       this.groupedRecords = [];
       this.selectedGroupRecords = [];
       this.filteredGroupRecords = [];
@@ -138,6 +157,31 @@ export const recordsStore = defineStore('recordsStore', {
 
     clearAllSelection() {
       this.selectedGroupRecords = [];
+    },
+    
+    toggleAllFilteredGroupRecordSelection(stateToSet: boolean): void {
+      let tempSelectedGroupRecords = this.selectedGroupRecords;
+      const clonedFilteredGroupRecords = toRaw(this.filteredGroupRecords);
+
+      clonedFilteredGroupRecords.forEach((groupedRecord: GroupedRecords, forIndex) => {
+        const groupedRecordRaw: GroupedRecords = groupedRecord;
+        const clonedGroupedRecord: GroupedRecords = { ...groupedRecordRaw};
+        const index = tempSelectedGroupRecords.findIndex(
+          (selectedGroupRecord) => selectedGroupRecord.groupTitle === clonedGroupedRecord.groupTitle
+        );
+        if (index === -1) {
+          tempSelectedGroupRecords = [...tempSelectedGroupRecords, clonedGroupedRecord];
+        } else {
+          const updatedGroupedRecords = [...tempSelectedGroupRecords];
+          if(!stateToSet) {
+            updatedGroupedRecords.splice(index, 1);
+          } else {
+            updatedGroupedRecords[index].records = [...clonedGroupedRecord.records];
+          }
+          tempSelectedGroupRecords = updatedGroupedRecords;
+        }
+      });
+      this.selectedGroupRecords = tempSelectedGroupRecords;
     },
 
     toggleGroupedRecordSelection(groupedRecord: GroupedRecords, stateToSet: boolean): void {

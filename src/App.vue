@@ -41,8 +41,6 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { useI18n } from "vue-i18n";
-import { RouterView } from 'vue-router'
 
 export enum LangEnum {
   EN = 'en',

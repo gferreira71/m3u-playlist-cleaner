@@ -54,42 +54,8 @@
         </div>
       </div>
 
-      <div v-if="!isOnProcessing"
-        class="processing-result">
-        <table class="processing-results-table">
-          <tr v-if="records?.length !== 0">
-            <th>
-              {{ $t('source.parsing_result.records_count') }}
-            </th>
-            <td>
-              {{ records?.length }}
-            </td>
-          </tr>
-          <tr v-if="mediaRecordsCount !== 0">
-            <th>
-              {{ $t('source.parsing_result.media_count') }}
-            </th>
-            <td>
-              {{ mediaRecordsCount }}
-            </td>
-          </tr>
-          <tr v-if="liveRecordsCount !== 0">
-            <th>
-              {{ $t('source.parsing_result.live_count') }}
-            </th>
-            <td>
-              {{ liveRecordsCount }}
-            </td>
-          </tr>
-          <tr v-if="vodRecordsCount !== 0">
-            <th>
-              {{ $t('source.parsing_result.vod_count') }}
-            </th>
-            <td>
-              {{ vodRecordsCount }}
-            </td>
-          </tr>
-        </table>
+      <div v-if="!isOnProcessing">
+        <ProcessingResultComponent></ProcessingResultComponent>
       </div>
 
       <div>
@@ -109,8 +75,13 @@ import { type Source, SourceTypeEnum } from "../../types/SourcesTypes";
 import { recordsStore } from './../../stores/recordsStore';
 import ParserService from "@/services/ParserService";
 import { RecordTypeEnum } from "@/types/RecordsTypes";
+import { type Error, ErrorTypeEnum } from "@/types/ErrorTypes";
+import ProcessingResultComponent from './components/ProcessingResultComponent.vue';
 
 export default defineComponent({
+  components: {
+    ProcessingResultComponent,
+  },
   data() {
       return { }
   },
@@ -120,7 +91,10 @@ export default defineComponent({
       'progressStatus',
       'groupedRecords',
       'records',
-      'isOnProcessing']),
+      'isOnProcessing',
+      'errors',
+      'warnings'
+    ]),
 
     liveRecordsCount(): number {
       return this.records?.filter(record => record.type === RecordTypeEnum.LIVE).length;
@@ -139,19 +113,21 @@ export default defineComponent({
         return;
       const uploadedFile: File = (event.files as File[])[0];
       const fileName: string = uploadedFile.name;
+      const fileSource: Source = {
+        type: SourceTypeEnum.UPLOADFILE,
+        fileName: fileName,
+        value: uploadedFile
+      };
 
       if (fileName.toLowerCase().endsWith('.m3u') || fileName.toLowerCase().endsWith('.m3u8')) {
         // call the store and dispatch the new source
         // this.handleFileChange(uploadedFile);
-        const fileSource: Source = {
-          type: SourceTypeEnum.UPLOADFILE,
-          fileName: fileName,
-          value: uploadedFile
-        };
         recordsStore()?.changeSource(fileSource);
       } else {
-        // TODO:handle the error
-        console.log('Please upload a file with .m3u or .m3u8 extension.');
+        const error: Error = {
+          type: ErrorTypeEnum.WRONG_FILE_EXTENSION,
+        }
+        recordsStore()?.changeSourceWithErrors(fileSource, error);
       }
     },
 
@@ -206,18 +182,6 @@ export default defineComponent({
 
   .process-progress {
     padding: 18px 0;
-  }
-
-  .processing-results-table {
-    th {
-      font-weight: 500;
-      text-align: left;
-      width: 300px;
-    }
-  }
-
-  .processing-result {
-    padding: 12px 4px;
   }
 }
 </style>

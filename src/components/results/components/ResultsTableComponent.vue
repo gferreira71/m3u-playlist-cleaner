@@ -18,7 +18,10 @@
       scrollHeight="500px"
       class="results-datatable">
 
-      <Column expander style="width: 5rem">
+      <Column expander style="width: 4rem">
+      </Column>
+
+      <Column style="width: 2rem">
         <template #header>
           <input
             type="checkbox"
@@ -27,7 +30,16 @@
             @change="selectAllFilteredRecordChanged($event)"
           />
         </template>
+        <template #body="slotProps">
+          <input
+            type="checkbox"
+            class="input-checkbox"
+            :checked="isGroupedRecordSelected(slotProps.data)"
+            @change="selectAllRecordChanged($event, slotProps.data)"
+          />
+        </template>
       </Column>
+
       <Column
         field="groupTitle"
         :header="$t('common_tables.group_name_column')"
@@ -199,8 +211,15 @@ export default defineComponent({
     },
 
     areAllFilteredRecordsSelected() {
-      // TODO
-      return false;
+      const selectedRecords = this.selectedGroupRecords.flatMap(
+        selectedGroupRecord => selectedGroupRecord.records
+      );
+      const filteredGroupRecordsRecords = this.filteredGroupRecords.flatMap(
+        groupRecords => groupRecords.records
+      );
+      return filteredGroupRecordsRecords.every(record =>
+        selectedRecords.includes(record)
+      );
     },
 
     getRecordSelectedCount(records: Record[]) {
@@ -213,16 +232,15 @@ export default defineComponent({
     },
 
     selectAllFilteredRecordChanged(event: any) {
-      // TODO
-      return;
-    },
-
-    selectRecordChanged(event: any, data: Record) {
-      recordsStore().toggleRecordSelection(data);
+      recordsStore().toggleAllFilteredGroupRecordSelection(event.target.checked);
     },
 
     selectAllRecordChanged(event: any, data: GroupedRecords) {
       recordsStore().toggleGroupedRecordSelection(data, event.target.checked);
+    },
+
+    selectRecordChanged(event: any, data: Record) {
+      recordsStore().toggleRecordSelection(data);
     },
   },
 });

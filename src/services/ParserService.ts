@@ -1,18 +1,45 @@
 import { ParsingStateEnum, type ParsingProcessState } from "@/types/ParsingProcessStatusTypes";
 import { ProgressStatusEnum } from "@/types/ProgressStatusTypes";
 import { RecordTypeEnum, type Record } from "@/types/RecordsTypes";
+import type { ParsingResult } from "@/types/ParsingResultTypes";
+import { WarningTypeEnum } from "@/types/WarningTypes";
+import { ErrorTypeEnum } from "@/types/ErrorTypes";
 
-// TODO:add the right type to the callback function
-function parseM3UFile(file: File, progressCallback: Function): Promise<Record[]> {
+const UNSUPPORTED_XM3U_TAG_LIST: string[] = [
+  '#PLAYLIST',
+  '#EXTGRP',
+  '#EXTALB',
+  '#EXTART',
+  '#EXTGENRE',
+  '#EXTM3A',
+  '#EXTBYT',
+  '#EXTBIN',
+  '#EXTIMG',
+];
+
+function parseM3UFile(file: File, progressCallback: Function): Promise<ParsingResult> {
   return new Promise((resolve, reject) => {
     const chunkSize = 1024 * 512; // Adjusted chunk size (512KB)
     const fileSize = file.size;
     let offset = 0;
+    let firstChunk: boolean = false;
     let partialLine: string = ''; // Store the last incomplete line
-
     let parsedContent: string = '';
 
+    const fileAboveOneGiga = file.size > 1024 * 1024 * 1024;
+    if(fileAboveOneGiga) {
+      const parsingResultInError: ParsingResult = {
+        records: [],
+        errors: [{
+          type: ErrorTypeEnum.FILE_TOO_BIG,
+        }],
+        warnings: []
+      }
+      resolve(parsingResultInError);
+    }
+
     const readChunk = async () => {
+      firstChunk = offset === 0;
       const chunk = file.slice(offset, offset + chunkSize);
       const reader = new FileReader();
 
@@ -22,11 +49,22 @@ function parseM3UFile(file: File, progressCallback: Function): Promise<Record[]>
 
         let lines = chunkContent.split(/\r?\n/);
 
+        // Check if first line of first chunk is the right M3U header
+        if(firstChunk && (lines[0] !== '#EXTM3U')) {
+          const parsingResultError: ParsingResult = {
+            records: [],
+            errors: [{
+              type: ErrorTypeEnum.WRONG_M3U_HEADER,
+            }],
+            warnings: []
+          }
+          resolve(parsingResultError);
+        }
+
         // Check if the chunk contains a partial record from the previous chunk
         if (!lines[0].startsWith('#EXTINF:')) {
           const lastLineIndex = lines.length - 1;
           partialLine = lines[lastLineIndex];
-          chunkContent = lines.slice(0, lastLineIndex).join('\n');
           lines = lines.slice(0, lastLineIndex);
         } else {
           partialLine = '';
@@ -66,8 +104,13 @@ function parseM3UFile(file: File, progressCallback: Function): Promise<Record[]>
   });
 }
 
-function parseM3U(m3uContent: string, progressCallback: Function): Promise<Record[]> {
+function parseM3U(m3uContent: string, progressCallback: Function): Promise<ParsingResult> {
   return new Promise((resolve, reject) => {
+    const parsingResults: ParsingResult = {
+      records: [],
+      errors: [],
+      warnings: []
+    };
     const parsedRecords: Record[] = [];
     const lines = m3uContent.split(/\r?\n/).filter(line => line.trim() !== '');
     const totalLines = lines.length;
@@ -98,12 +141,22 @@ function parseM3U(m3uContent: string, progressCallback: Function): Promise<Recor
           const durationMatch = blockContent.match(/#EXTINF:(-?\d+)/);
           if (durationMatch && durationMatch.length > 1) {
             record.duration = parseInt(durationMatch[1]);
+          } else {
+            parsingResults.warnings.push({
+              line: index,
+              type: WarningTypeEnum.NO_DURATION_RECORD
+            });
           }
 
           // Extract the name from the last non-link line of the record
           const nameMatch = lines[lastLineIndex - 1]?.match(/,([^,]+)$/);
           if (nameMatch && nameMatch.length > 1) {
             record.name = nameMatch[1].trim();
+          } else {
+            parsingResults.warnings.push({
+              line: index,
+              type: WarningTypeEnum.NO_NAME_RECORD
+            });
           }
 
           const attributes = blockContent.match(/([^=\s]+)="([^"]+)"/g);
@@ -141,7 +194,27 @@ function parseM3U(m3uContent: string, progressCallback: Function): Promise<Recor
             record.link = link;
             record.type = type;
             parsedRecords.push(record);
+          } else {
+            parsingResults.warnings.push({
+              line: index,
+              type: WarningTypeEnum.NO_LINK_RECORD
+            });
           }
+        } else if(line.startsWith('#EXT-X')) {
+          parsingResults.warnings.push({
+            line: index,
+            type: WarningTypeEnum.UNSUPPORTED_HLS_TAG
+          });
+        } else if(startsWithAny(line, UNSUPPORTED_XM3U_TAG_LIST)) {
+          parsingResults.warnings.push({
+            line: index,
+            type: WarningTypeEnum.UNSUPPORTED_XM3U_TAG
+          });
+        } else if(line.startsWith('#') && !line.startsWith('#EXTM3U')) {
+          parsingResults.warnings.push({
+            line: index,
+            type: WarningTypeEnum.UNKNOWN_TAG
+          });
         }
 
         const parsingProgress = Math.round(((index + 1) / totalLines) * 100);
@@ -157,42 +230,8 @@ function parseM3U(m3uContent: string, progressCallback: Function): Promise<Recor
       if (index < totalLines) {
         setTimeout(processBatch, 0);
       } else {
-        /*
-        const groupedByType = parsedRecords.reduce((acc, record) => {
-          const type = /\.(mp4|mkv|avi|mpg|m4v|ts)$/i.test(record.link) ? 'VOD' : 'LIVE';
-          const existingType = acc.find(item => item.name === type);
-
-          if (!existingType) {
-            acc.push({ name: type, records: [record] });
-          } else {
-            existingType.records.push(record);
-          }
-
-          return acc;
-        }, []);
-        */
-
-        /* const groupedByGroupTitle = groupedByType.map(typeGroup => {
-          const groupedByGroup = typeGroup.records.reduce((acc, record) => {
-            const existingGroup = acc.find(item => item.group_name === record['group-title']);
-
-            if (!existingGroup) {
-              acc.push({ group_name: record['group-title'], records: [record] });
-            } else {
-              existingGroup.records.push(record);
-            }
-
-            return acc;
-          }, []);
-
-          typeGroup.records = groupedByGroup;
-          return typeGroup;
-        });
-        resolve(groupedByGroupTitle);
-        */
-
-        //resolve(groupedByType);
-        resolve(parsedRecords);
+        parsingResults.records = parsedRecords;
+        resolve(parsingResults);
       }
     };
 
@@ -286,6 +325,15 @@ function downloadM3uResults(records: Record[], filename: string) {
   link.href = window.URL.createObjectURL(blob);
   link.download = `${filename}.m3u`;
   link.click();
+}
+
+function startsWithAny(targetString: string, possibleStrings: string[]): boolean {
+  for (const str of possibleStrings) {
+    if (targetString.startsWith(str)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 export default {parseM3UFile, downloadM3uResults, getDemoFile, downloadFileFromUrl}
