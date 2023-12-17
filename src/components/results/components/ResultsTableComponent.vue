@@ -24,6 +24,7 @@
       <Column style="width: 2rem">
         <template #header>
           <input
+            v-if="filteredGroupRecords?.length !== 0"
             type="checkbox"
             class="input-checkbox"
             :checked="areAllFilteredRecordsSelected()"

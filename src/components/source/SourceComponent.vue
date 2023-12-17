@@ -2,18 +2,23 @@
   <div class="source-component container">
     <h2>{{ $t('source.source_file') }}</h2>
     <div v-if="!source">
-      <div class="upload-section">
-        <FileUpload
-          :chooseLabel="$t('source.select_file')"
-          :customUpload="true"
-          :auto="true"
-          :multiple="false"
-          mode="basic"
-          @uploader="fileUploader($event)" />
-        <Button
-          :label="$t('source.demo_file')"
-          class="demo-button"
-          @click="uploadDemoFile()" />
+      <div class="col-12 grid">
+        <div class="col-12 lg:col-4 md:col-5 sm:col-6">
+          <FileUpload
+            :chooseLabel="$t('source.select_file')"
+            :customUpload="true"
+            :auto="true"
+            :multiple="false"
+            mode="basic"
+            class="button-full-width"
+            @uploader="fileUploader($event)" />
+        </div>
+        <div class="col-12 lg:col-3 md:col-4 sm:col-6">
+          <Button
+            :label="$t('source.demo_file')"
+            class="button-full-width"
+            @click="uploadDemoFile()" />
+        </div>
       </div>
     </div>
 
@@ -156,15 +161,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .source-component {
-  padding-top: 24px;
-
-  .upload-section {
-    display: inline-flex;
-    .demo-button {
-      margin-left: 8px;
-    }
-  }
-
   .source-infos {
     background: white;
     padding: 18px;
@@ -182,6 +178,10 @@ export default defineComponent({
 
   .process-progress {
     padding: 18px 0;
+  }
+
+  :deep(.p-fileupload-choose) {
+    max-height: 39px;
   }
 }
 </style>

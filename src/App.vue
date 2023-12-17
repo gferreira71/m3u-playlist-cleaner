@@ -51,7 +51,7 @@ export enum LangEnum {
 export default defineComponent({
   data() {
     return {
-      langEnum: LangEnum
+      langEnum: LangEnum,
     };
   },
   created() { },

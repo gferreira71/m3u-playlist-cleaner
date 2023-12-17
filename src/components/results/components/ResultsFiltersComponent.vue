@@ -7,7 +7,7 @@
       @submit.prevent="handleFilter()">
       <div class="search-text col-12 grid">
 
-        <div class="col-4">
+        <div class="col-12 lg:col-4 md:col-5 sm:col-5">
           <div class="field">
             <label for="search_text">{{ $t('form.searched_text') }}</label>
             <InputText
@@ -17,7 +17,7 @@
           </div>
         </div>
 
-        <div class="col-5">
+        <div class="col-12 lg:col-5 md:col-7 sm:col-7">
           <div class="field">
             <label for="search_text_scope">{{ $t('form.searched_text_scope') }}</label>
             <div
@@ -37,7 +37,7 @@
           </div>
         </div>
 
-        <div class="col-3">
+        <div class="col-12 lg:col-3 md:col-6 sm:col-6">
           <div class="field">
             <label for="record_type">{{ $t('form.record_type') }}</label>
             <SelectButton
@@ -53,7 +53,7 @@
       </div>
 
       <div class="col-12 grid">
-        <div class="col-4">
+        <div class="col-12 lg:col-4 md:col-6 sm:col-6">
           <Button
             type="submit"
             icon="pi pi-filter"
@@ -63,7 +63,7 @@
           </Button>
         </div>
 
-        <div class="col-4">
+        <div class="col-12 lg:col-4 md:col-6 sm:col-6">
           <Button
             @click="resetFilters()"
             class="button-full-width"
@@ -142,16 +142,18 @@ export default defineComponent({
     border-radius: 4px;
   }
 
-  .button-full-width {
-    width: 100%;
-  }
-
   .search-text-scope-list {
     display: inline-flex;
     width: 100%;
     margin-top: 8px;
     label {
       margin: 0 6px;
+    }
+  }
+
+  @media (max-width: 446px) {
+    .search-text-scope-list {
+      flex-direction: column;
     }
   }
 }

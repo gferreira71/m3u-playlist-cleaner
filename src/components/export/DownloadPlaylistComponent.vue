@@ -2,7 +2,7 @@
   <div class="download-playlist container">
     <h2>{{ $t('download_playlist.download_new_playlist') }}</h2>
     <div class="col-12 grid">
-      <div class="col-4">
+      <div class="col-12 lg:col-4 md:col-5 sm:col-6">
         <div class="field">
           <label for="filename">
             {{ $t('download_playlist.new_file_name') }}
@@ -17,11 +17,12 @@
     </div>
 
     <div class="col-12 grid">
-      <div class="col-6">
+      <div class="col-12 lg:col-4 md:col-5 sm:col-6">
         <div class="field">
           <Button
             :label="$t('download_playlist.download_button')"
             icon="pi pi-download"
+            class="button-full-width"
             :disabled="downloadButtonDisabled"
             @click="downloadResults()"/>
           </div>

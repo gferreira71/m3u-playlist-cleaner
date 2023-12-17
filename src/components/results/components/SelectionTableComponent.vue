@@ -17,8 +17,8 @@
       scrollHeight="500px">
     <template #empty>{{ $t('selection_table.no_result_selected') }}</template>
     
-    <Column expander style="width: 5rem" />
-    <Column>
+    <Column expander style="width: 4rem" />
+    <Column style="width: 4rem">
       <template #header>
         <Button
         v-if="selectedGroupRecords?.length !== 0"

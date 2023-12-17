@@ -10,7 +10,34 @@
         "download_progress": "Progression du téléchargement : {progress}",
         "upload_progress": "Progression de l'envoi : {progress}",
         "parsing_progress": "Progression du traitement : {progress}",
-        "btn_clear_source": "Réinitialiser la source"
+        "btn_clear_source": "Réinitialiser la source",
+        "parsing_result": {
+            "records_count": "Nombre d'enregistrements",
+            "media_count": "Nombre de media",
+            "live_count": "Nombre de live",
+            "vod_count": "Nombre de VOD",
+            "warning": "Attention: {count} problème trouvé dans le fichier | Attention: {count} problèmes trouvés dans le fichier",
+            "error": "Erreur",
+            "error_key": {
+                "WRONG_M3U_HEADER": "Mauvaise entête M3U",
+                "WRONG_FILE_EXTENSION": "Mauvaise extension du fichier",
+                "WRONG_FILE_SIGNATURE": "Mauvaise signature du fichier",
+                "FILE_TOO_BIG": "Fichier trop lourd (max 1Go)",
+                "READING_FILE_ERROR": "Erreur durant la lecture du fichier",
+                "PARSING_FILE_ERROR": "Erreur durant le traitement du fichier",
+                "UNKNOWN_ERROR": "Erreur inconnue"
+            },
+            "warning_key": {
+                "UNSUPPORTED_HLS_TAG": "Marqueur HLS non-supporté",
+                "UNSUPPORTED_XM3U_TAG": "Marqueur XM3U non-supporté",
+                "UNKNOWN_TAG": "Marqueur inconnu",
+                "NO_LINK_RECORD": "Aucun lien trouvé pour l'entregistrement",
+                "NO_NAME_RECORD": "Aucun nom trouvé pour l'entregistrement",
+                "NO_DURATION_RECORD": "Aucune durée trouvée pour l'entregistrement"
+            },
+            "error_line": "Ligne {line}: ",
+            "warning_line": "Ligne {line}: "
+        }
     },
     "form": {
         "records_filters_form": "Formulaire de filtrage des enregistrements",
@@ -22,11 +49,13 @@
     },
     "records_table": {
         "filtered_records": "Enregistrement filtré",
-        "no_result_found": "Aucun résultat trouvé."
+        "no_result_found": "Aucun résultat trouvé.",
+        "details_content": "Entregistrements: {recordsCount} - Sélectionnés: {selectedCount}"
     },
     "selection_table": {
         "selected_records": "Enregistrement sélectionné",
-        "no_result_selected": "Aucun résultat sélectionné."
+        "no_result_selected": "Aucun résultat sélectionné.",
+        "details_content": "Enregistrements: {recordsCount}"
     },
     "download_playlist": {
         "download_new_playlist": "Télecharger la nouvelle playlist",
