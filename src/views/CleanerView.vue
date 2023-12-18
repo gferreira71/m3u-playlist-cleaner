@@ -14,6 +14,7 @@ import { defineComponent } from 'vue';
 import SourceComponent from './../components/source/SourceComponent.vue';
 import ResultsComponent from './../components/results/ResultsComponent.vue';
 import DownloadPlaylistComponent from './../components/export/DownloadPlaylistComponent.vue';
+import { recordsStore } from '@/stores/recordsStore';
 // import ParserService from './../services/ParserService';
 
 export default defineComponent({
@@ -26,7 +27,11 @@ export default defineComponent({
     return {};
   },
   computed: {},
-  created() { },
+  created() {
+  },
+  mounted() {
+    recordsStore()?.setViewLoaded(true);
+  },
   methods: {},
 });
 </script>

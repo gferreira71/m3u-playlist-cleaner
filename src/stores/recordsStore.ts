@@ -15,6 +15,7 @@ import type { ParsingResult } from '@/types/ParsingResultTypes';
 import { toRaw } from 'vue';
 
 export interface RecordStoreState {
+  isViewLoaded: boolean;
   source?: Source;
   isOnProcessing: boolean;
   progressStatus?: ProgressStatus;
@@ -30,6 +31,7 @@ export interface RecordStoreState {
 
 export const recordsStore = defineStore('recordsStore', {
   state: (): RecordStoreState => ({
+    isViewLoaded: false,
     source: undefined,
     isOnProcessing: false,
     progressStatus: undefined,
@@ -275,7 +277,10 @@ export const recordsStore = defineStore('recordsStore', {
         scope: [RecordTypeEnum.LIVE, RecordTypeEnum.MEDIA, RecordTypeEnum.VOD],
         scopeText: [ScopeTextEnum.GROUPTITLE, ScopeTextEnum.NAME]
       };
-      
+    },
+
+    setViewLoaded(isViewLoaded: boolean) {
+      this.isViewLoaded = isViewLoaded;
     }
   },
 });

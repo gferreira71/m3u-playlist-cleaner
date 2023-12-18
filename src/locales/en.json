@@ -1,6 +1,7 @@
 {
     "global": {
-        "app_name": "m3u playlist cleaner"
+        "app_name": "m3u playlist cleaner",
+        "loading": "Loading"
     },
     "source": {
         "source_file": "Source file",

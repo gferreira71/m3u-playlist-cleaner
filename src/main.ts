@@ -22,6 +22,7 @@ import Button from 'primevue/button';
 import Badge from 'primevue/badge';
 import ProgressBar from 'primevue/progressbar';
 import Panel from 'primevue/panel';
+import ProgressSpinner from 'primevue/progressspinner';
 
 const app = createApp(App)
 
@@ -40,6 +41,7 @@ app.component('Button', Button);
 app.component('Badge', Badge);
 app.component('ProgressBar', ProgressBar);
 app.component('Panel', Panel);
+app.component('ProgressSpinner', ProgressSpinner);
 
 app.use(i18n);
 

@@ -24,6 +24,9 @@
     </div>
   </header>
   <main>
+    <template v-if="!isViewLoaded">
+      <LoadingComponent />
+    </template>
     <RouterView />
   </main>
   <footer>
@@ -40,7 +43,10 @@
 </template>
 
 <script lang="ts">
+import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
+import { recordsStore } from './stores/recordsStore';
+import LoadingComponent from './components/global/LoadingComponent.vue';
 
 export enum LangEnum {
   EN = 'en',
@@ -48,11 +54,18 @@ export enum LangEnum {
   PT = 'pt'
 }
 
+
 export default defineComponent({
+  components: {
+    LoadingComponent,
+  },
   data() {
     return {
       langEnum: LangEnum,
     };
+  },
+  computed: {
+    ...mapState(recordsStore, ['isViewLoaded']),
   },
   created() { },
   methods: {
@@ -115,7 +128,8 @@ header {
 
 main {
   background-color: var(--surface-ground);
-  min-height: calc(100vh - 80px);
+  height: 100%;
+  min-height: calc(100vh - 30px);
   padding-top: 50px;
 }
 
