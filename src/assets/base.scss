@@ -11,6 +11,7 @@ html {
   font-size: 14px;
   height: 100%;
   overflow-y: scroll;
+  background-color: var(--surface-ground);
 }
 
 body {
@@ -25,14 +26,14 @@ body {
     Inter,
     -apple-system,
     BlinkMacSystemFont,
-    'Segoe UI',
+    "Segoe UI",
     Roboto,
     Oxygen,
     Ubuntu,
     Cantarell,
-    'Fira Sans',
-    'Droid Sans',
-    'Helvetica Neue',
+    "Fira Sans",
+    "Droid Sans",
+    "Helvetica Neue",
     sans-serif;
   font-size: 14px;
   margin: 0;
@@ -83,6 +84,14 @@ body {
   width: 100%;
 }
 
+:deep(.p-datatable .p-datatable-tbody > tr > td) {
+  padding: 6px 6px;
+}
+
 :deep(.p-datatable-emptymessage > td) {
   text-align: center !important;
+}
+
+:deep(.p-progressbar-determinate .p-progressbar-value-animate) {
+  transition: none !important;
 }

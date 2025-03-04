@@ -1,10 +1,18 @@
 <template>
   <div class="results-table-component container">
-    <h2>{{ $t('records_table.filtered_records') }}
+    <h2>
+      {{ $t("records_table.filtered_records") }}
       <span class="filters-count-label">
-        {{ $tc('common_tables.records_count', filteredGroupRecordsCount ?? 0, {count: filteredGroupRecordsCount ?? '0'}) }}
+        {{
+          $tc("common_tables.records_count", filteredGroupRecordsCount ?? 0, {
+            count: filteredGroupRecordsCount ?? "0",
+          })
+        }}
       </span>
     </h2>
+
+    <ImageComponent :imageSource="activeLogo" @closeImage="onCloseImage()" />
+
     <DataTable
       :value="filteredGroupRecords"
       :loading="isFilteringRunning"
@@ -16,10 +24,9 @@
       :row-class="resultTableRowClass"
       scrollable
       scrollHeight="500px"
-      class="results-datatable">
-
-      <Column expander style="width: 4rem">
-      </Column>
+      class="results-datatable"
+    >
+      <Column expander style="width: 4rem"> </Column>
 
       <Column style="width: 2rem">
         <template #header>
@@ -44,29 +51,27 @@
       <Column
         field="groupTitle"
         :header="$t('common_tables.group_name_column')"
-        ></Column>
-      <Column
-        :header="$t('common_tables.details_column')">
+      ></Column>
+      <Column :header="$t('common_tables.details_column')">
         <template #body="slotProps">
-          {{ $t('records_table.details_content', {
-            recordsCount: slotProps.data.records?.length || 0,
-            selectedCount: getRecordSelectedCount(slotProps.data.records)
-          }) }}
+          {{
+            $t("records_table.details_content", {
+              recordsCount: slotProps.data.records?.length || 0,
+              selectedCount: getRecordSelectedCount(slotProps.data.records),
+            })
+          }}
         </template>
       </Column>
-      <Column
-        field="type"
-        :header="$t('common_tables.type_column')">
+      <Column field="type" :header="$t('common_tables.type_column')">
         <template #body="slotProps">
           <Badge :value="slotProps.data.type"></Badge>
         </template>
       </Column>
 
       <template #empty>
-        {{ $t('records_table.no_result_found') }}
+        {{ $t("records_table.no_result_found") }}
       </template>
       <template #expansion="slotProps">
-
         <DataTable
           :value="slotProps.data.records"
           dataKey="name"
@@ -76,10 +81,10 @@
           :row-class="recordsTableRowClass"
           class="expand-row-table"
           scrollable
-          scrollHeight="300px">
-
+          scrollHeight="300px"
+        >
           <template #empty>
-            {{ $t('common_tables.nothing_to_show') }}
+            {{ $t("common_tables.nothing_to_show") }}
           </template>
 
           <Column headerStyle="width: 3rem">
@@ -102,34 +107,30 @@
             </template>
           </Column>
 
-          <Column
-            header="tvg-logo"
-            style="width: 80px">
+          <Column header="tvg-logo" style="width: 80px; line-height: 0">
             <template #body="row">
-              <img v-if="row.data.tvgParameters?.tvgLogo"
-                :src="row.data.tvgParameters?.tvgLogo"
-                class="tvg-logo-picture"/>
-                <div v-else
-                  class="no-logo-symbol">
-                  ?
-                </div>
+              <template v-if="row.data.tvgParameters?.tvgLogo">
+                <img
+                  :src="row.data.tvgParameters?.tvgLogo"
+                  class="tvg-logo-picture"
+                  @click="selectActiveLogo(row.data.tvgParameters?.tvgLogo)"
+                />
+              </template>
+              <div v-else class="no-logo-symbol">?</div>
             </template>
           </Column>
 
           <Column
             field="name"
-            :header="$t('common_tables.name_column')"></Column>
+            :header="$t('common_tables.name_column')"
+          ></Column>
           <Column header="tvg-name">
             <template #body="row">
-              {{ row.data.tvgParameters?.tvgName || '-' }}
+              {{ row.data.tvgParameters?.tvgName || "-" }}
             </template>
           </Column>
-          <Column
-            field="groupTitle"
-            header="group-title"></Column>
-          <Column
-            field="type"
-            :header="$t('common_tables.type_column')">
+          <Column field="groupTitle" header="group-title"></Column>
+          <Column field="type" :header="$t('common_tables.type_column')">
             <template #body="slotProps">
               <Badge :value="slotProps.data.type"></Badge>
             </template>
@@ -139,25 +140,30 @@
     </DataTable>
   </div>
 </template>
-  
+
 <script lang="ts">
-import { recordsStore } from '@/stores/recordsStore';
-import { mapState } from 'pinia';
-import { defineComponent } from 'vue';
-import { type Record } from '@/types/RecordsTypes';
-import type { GroupedRecords } from '@/types/GroupedRecordsTypes';
+import { recordsStore } from "@/stores/recordsStore";
+import { mapState } from "pinia";
+import { defineComponent } from "vue";
+import { type Record } from "@/types/RecordsTypes";
+import type { GroupedRecords } from "@/types/GroupedRecordsTypes";
+import ImageComponent from "@/components/common/ImageComponent.vue";
 
 export default defineComponent({
+  components: {
+    ImageComponent,
+  },
   data() {
     return {
       expandedRows: [] as any[],
+      activeLogo: null as string | null,
     };
   },
   computed: {
     ...mapState(recordsStore, [
-      'filteredGroupRecords',
-      'selectedGroupRecords',
-      'isFilteringRunning'
+      "filteredGroupRecords",
+      "selectedGroupRecords",
+      "isFilteringRunning",
     ]),
 
     filteredGroupRecordsCount(): number {
@@ -166,74 +172,84 @@ export default defineComponent({
       }, 0);
     },
   },
-  created() { },
+  created() {},
   methods: {
+    onCloseImage() {
+      this.activeLogo = null;
+    },
+    selectActiveLogo(logo: string) {
+      console.log(logo);
+      this.activeLogo = logo;
+    },
     resultTableRowClass(rowData: any): string {
-      let clazz = '';
-      if(!rowData.records) clazz += 'no-expander';
-      if(this.isGroupedRecordSelected(rowData)) {
-        clazz += 'row-highlighted-full';
-      } else if(this.isGroupedRecordPartiallySelected(rowData)) {
-        clazz += 'row-highlighted-partial';
+      let clazz = "";
+      if (!rowData.records) clazz += "no-expander";
+      if (this.isGroupedRecordSelected(rowData)) {
+        clazz += "row-highlighted-full";
+      } else if (this.isGroupedRecordPartiallySelected(rowData)) {
+        clazz += "row-highlighted-partial";
       }
       return clazz;
     },
 
     recordsTableRowClass(rowData: any): string {
-      let clazz = '';
-      if(this.isRecordSelected(rowData)) {
-        clazz += 'row-highlighted-full';
+      let clazz = "";
+      if (this.isRecordSelected(rowData)) {
+        clazz += "row-highlighted-full";
       }
       return clazz;
     },
 
     isGroupedRecordSelected(groupedRecord: GroupedRecords) {
       const selectedRecords = this.selectedGroupRecords.flatMap(
-        selectedGroupRecord => selectedGroupRecord.records
+        (selectedGroupRecord) => selectedGroupRecord.records
       );
-      return groupedRecord.records.every(record =>
+      return groupedRecord.records.every((record) =>
         selectedRecords.includes(record)
       );
     },
 
     isGroupedRecordPartiallySelected(groupedRecord: GroupedRecords) {
       const selectedRecords = this.selectedGroupRecords.flatMap(
-        selectedGroupRecord => selectedGroupRecord.records
+        (selectedGroupRecord) => selectedGroupRecord.records
       );
-      return groupedRecord.records.some(record =>
+      return groupedRecord.records.some((record) =>
         selectedRecords.includes(record)
       );
     },
 
     isRecordSelected(record: Record) {
-      return this.selectedGroupRecords.some(groupedRecord =>
-        groupedRecord.records.some(selectedRecord => selectedRecord.name === record.name)
+      return this.selectedGroupRecords.some((groupedRecord) =>
+        groupedRecord.records.some(
+          (selectedRecord) => selectedRecord.name === record.name
+        )
       );
     },
 
     areAllFilteredRecordsSelected() {
       const selectedRecords = this.selectedGroupRecords.flatMap(
-        selectedGroupRecord => selectedGroupRecord.records
+        (selectedGroupRecord) => selectedGroupRecord.records
       );
       const filteredGroupRecordsRecords = this.filteredGroupRecords.flatMap(
-        groupRecords => groupRecords.records
+        (groupRecords) => groupRecords.records
       );
-      return filteredGroupRecordsRecords.every(record =>
+      return filteredGroupRecordsRecords.every((record) =>
         selectedRecords.includes(record)
       );
     },
 
     getRecordSelectedCount(records: Record[]) {
       const selectedRecords: Record[] = this.selectedGroupRecords.flatMap(
-        selectedGroupRecord => selectedGroupRecord.records
+        (selectedGroupRecord) => selectedGroupRecord.records
       );
-      return records.filter(record =>
-        selectedRecords.includes(record)
-      ).length;
+      return records.filter((record) => selectedRecords.includes(record))
+        .length;
     },
 
     selectAllFilteredRecordChanged(event: any) {
-      recordsStore().toggleAllFilteredGroupRecordSelection(event.target.checked);
+      recordsStore().toggleAllFilteredGroupRecordSelection(
+        event.target.checked
+      );
     },
 
     selectAllRecordChanged(event: any, data: GroupedRecords) {
@@ -261,7 +277,11 @@ export default defineComponent({
 
   .tvg-logo-picture {
     width: auto;
-    height: 30px;
+    height: 44px;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   .expand-row-table {

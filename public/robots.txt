@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://m3u.guillaumeferreira.com
+
+# Sitemaps
+Sitemap: https://m3u.guillaumeferreira.com/sitemap.xml

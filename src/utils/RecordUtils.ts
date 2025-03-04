@@ -2,8 +2,9 @@ import { GroupRecordsTypeEnum } from "@/types/GroupedRecordsTypes";
 import type { Record } from "@/types/RecordsTypes";
 
 export default class RecordUtils {
-
-  public static computeGroupRecordsType(records: Record[]): GroupRecordsTypeEnum {
+  public static computeGroupRecordsType(
+    records: Record[]
+  ): GroupRecordsTypeEnum {
     const typesSet = new Set<string>();
     records.forEach((record: Record) => {
       if (record.type) {

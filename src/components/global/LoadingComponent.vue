@@ -1,22 +1,20 @@
 <template>
   <div class="loading-container">
-    <ProgressSpinner
-      :aria-label="$t('global.loading')"/>
+    <ProgressSpinner :aria-label="$t('global.loading')" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
 
 export default defineComponent({
   data() {
-    return { };
+    return {};
   },
-  computed: { },
-  created() { },
-  methods: { }
+  computed: {},
+  created() {},
+  methods: {},
 });
-
 </script>
 
 <style lang="scss" scoped>

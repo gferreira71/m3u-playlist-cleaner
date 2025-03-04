@@ -1,16 +1,15 @@
-import { createI18n } from 'vue-i18n';
-import enLocale from './../locales/en.json';
-import frLocale from './../locales/fr.json';
-import ptLocale from './../locales/pt.json';
+import { createI18n } from "vue-i18n";
+import enLocale from "./../locales/en.json";
+import frLocale from "./../locales/fr.json";
 
 const messages = {
-    en: enLocale,
-    fr: frLocale,
-    pt: ptLocale
+  en: enLocale,
+  fr: frLocale,
 };
 
 export const i18n = createI18n({
-    locale: 'en',
-    fallbackLocale: 'en',
-    messages
+  allowComposition: true,
+  locale: localStorage.getItem("lang") || "en",
+  fallbackLocale: "en",
+  messages,
 });

@@ -3,6 +3,7 @@
 M3u playlist cleaner is a web application for parsing and extracting data from an uploaded m3u file.
 
 ## Table of Contents
+
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Usage](#usage)
@@ -10,6 +11,7 @@ M3u playlist cleaner is a web application for parsing and extracting data from a
 - [Contributing](#contributing)
 
 ## Prerequisites
+
 - Node.js 18.x or higher
 - Windows, macOS, or Linux operating system
 

@@ -1,74 +1,110 @@
 {
-    "global": {
-        "app_name": "m3u playlist cleaner",
-        "loading": "Loading"
+  "global": {
+    "app_name": "m3u playlist cleaner",
+    "loading": "Loading"
+  },
+  "source": {
+    "download_m3u_fil_from_url": "Download a .m3u file from an URL",
+    "upload_m3u_file": "Upload a .m3u file",
+    "download_not_available": "Download not available",
+    "favorite_table": {
+      "name": "Name",
+      "url": "URL",
+      "actions": "Actions",
+      "records": "Records",
+      "remove_dialog": {
+        "title": "Are you sure you want to remove this favorite?",
+        "ok": "Yes",
+        "cancel": "No"
+      }
     },
-    "source": {
-        "source_file": "Source file",
-        "select_file": "Select a file",
-        "demo_file": "Demo file",
-        "file_uploaded": "File uploaded",
-        "download_progress": "Download progress : {progress}",
-        "upload_progress": "Uploading progress : {progress}",
-        "parsing_progress": "Parsing progress : {progress}",
-        "btn_clear_source": "Clear source",
-        "parsing_result": {
-            "records_count": "Number of records",
-            "media_count": "Number of media",
-            "live_count": "Number of live",
-            "vod_count": "Number of VOD",
-            "warning": "Warning: {count} issue found on the file | Warning: {count} issues found on the file",
-            "error": "Error",
-            "error_key": {
-                "WRONG_M3U_HEADER": "Wrong M3U header",
-                "WRONG_FILE_EXTENSION": "Wrong file extension",
-                "WRONG_FILE_SIGNATURE": "Wrong file signature",
-                "FILE_TOO_BIG": "File too big (limit 1Go)",
-                "READING_FILE_ERROR": "Error during the file reading",
-                "PARSING_FILE_ERROR": "Error during the file parsing",
-                "UNKNOWN_ERROR": "Unknown error"
-            },
-            "warning_key": {
-                "UNSUPPORTED_HLS_TAG": "Unsupported HLS tag",
-                "UNSUPPORTED_XM3U_TAG": "Unsupported XM3U tag",
-                "UNKNOWN_TAG": "Unknown tag",
-                "NO_LINK_RECORD": "No link found for the record",
-                "NO_NAME_RECORD": "No name found for the record",
-                "NO_DURATION_RECORD": "No duration found for the record"
-            },
-            "error_line": "Line {line}: ",
-            "warning_line": "Line {line}: "
-        }
+    "url_file_to_download": "URL file to download",
+    "download_url": "Download URL",
+    "divider_or": "OR",
+    "favorite": {
+      "favorite_urls": "Favorite URL list",
+      "add_favorite": "Add to favorite",
+      "remove_favorite": "Remove from favorite",
+      "remove": "Remove",
+      "cancel": "Cancel",
+      "favorite_name": "Name",
+      "url_already_favorite_1": "URL for ",
+      "url_already_favorite_2": " is present in favorites",
+      "url_already_favorite": "URL is present in favorites"
     },
-    "form": {
-        "records_filters_form": "Records filters form",
-        "searched_text": "Searched text",
-        "searched_text_scope": "Searched text scope",
-        "record_type": "Record type",
-        "filter_button": "Apply filters",
-        "reset_filters": "Reset filters"
+    "source_file": "Source file",
+    "select_file": "Select a file",
+    "demo_file": "Demo file",
+    "file_uploaded": "File uploaded",
+    "file_downloaded": "File downloaded",
+    "download_progress": "Download progress : {progress}",
+    "upload_progress": "Uploading progress : {progress}",
+    "parsing_progress": "Parsing progress : {progress}",
+    "progress": {
+      "NOT_REQUIRED": "Not required",
+      "PENDING": "Pending",
+      "RUNNING": "Running",
+      "DONE": "Done",
+      "ERROR": "Error"
     },
-    "records_table": {
-        "filtered_records": "Filtered records",
-        "no_result_found": "No result found.",
-        "details_content": "Records: {recordsCount} - Selected: {selectedCount}"
-    },
-    "selection_table": {
-        "selected_records": "Selected records",
-        "no_result_selected": "No result selected.",
-        "details_content": "Records: {recordsCount}"
-    },
-    "download_playlist": {
-        "download_new_playlist": "Download new playlist",
-        "new_file_name": "New file name",
-        "download_button": "Download M3U result file"
-    },
-    "common_tables": {
-        "records_count": "No record | {count} record | {count} records",
-        "name_column": "Name",
-        "group_name_column": "Group name",
-        "details_column": "Details",
-        "type_column": "Type",
-        "nothing_to_show": "Nothing to show."
+    "btn_clear_source": "Clear source",
+    "parsing_result": {
+      "records_count": "Number of records",
+      "media_count": "Number of media",
+      "live_count": "Number of live",
+      "vod_count": "Number of VOD",
+      "warning": "Warning: {count} issue found on the file | Warning: {count} issues found on the file",
+      "error": "Error",
+      "error_key": {
+        "WRONG_M3U_HEADER": "Wrong M3U header",
+        "WRONG_FILE_EXTENSION": "Wrong file extension",
+        "WRONG_FILE_SIGNATURE": "Wrong file signature",
+        "FILE_TOO_BIG": "File too big (limit 1Go)",
+        "READING_FILE_ERROR": "Error during the file reading",
+        "PARSING_FILE_ERROR": "Error during the file parsing",
+        "UNKNOWN_ERROR": "Unknown error"
+      },
+      "warning_key": {
+        "UNSUPPORTED_HLS_TAG": "Unsupported HLS tag",
+        "UNSUPPORTED_XM3U_TAG": "Unsupported XM3U tag",
+        "UNKNOWN_TAG": "Unknown tag",
+        "NO_LINK_RECORD": "No link found for the record",
+        "NO_NAME_RECORD": "No name found for the record",
+        "NO_DURATION_RECORD": "No duration found for the record"
+      },
+      "error_line": "Line {line}: ",
+      "warning_line": "Line {line}: "
     }
+  },
+  "form": {
+    "records_filters_form": "Records filters form",
+    "searched_text": "Searched text",
+    "searched_text_scope": "Searched text scope",
+    "record_type": "Record type",
+    "filter_button": "Apply filters",
+    "reset_filters": "Reset filters"
+  },
+  "records_table": {
+    "filtered_records": "Filtered records",
+    "no_result_found": "No result found.",
+    "details_content": "Records: {recordsCount} - Selected: {selectedCount}"
+  },
+  "selection_table": {
+    "selected_records": "Selected records",
+    "no_result_selected": "No result selected.",
+    "details_content": "Records: {recordsCount}"
+  },
+  "download_playlist": {
+    "download_new_playlist": "Download new playlist",
+    "new_file_name": "New file name",
+    "download_button": "Download M3U result file"
+  },
+  "common_tables": {
+    "records_count": "No record | {count} record | {count} records",
+    "name_column": "Name",
+    "group_name_column": "Group name",
+    "details_column": "Details",
+    "type_column": "Type",
+    "nothing_to_show": "Nothing to show."
+  }
 }

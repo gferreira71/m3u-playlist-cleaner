@@ -1,11 +1,24 @@
 #EXTM3U
-#EXTINF:-1 tvg-id="chaine1.fr" tvg-name="chaine1HD" tvg-logo="" group-title="FRANCE",Chaine 1
-http://alink/123/456/01
-#EXTINF:-1 tvg-id="chaine2.fr" tvg-name="chaine2HD" tvg-logo="" group-title="FRANCE",Chaine 2
-http://alink/123/456/02
-#EXTINF:-1 tvg-id="canaluno.fr" tvg-name="canaluno, en HD" tvg-logo="" group-title="PORTUGAL",Canal Uno 1
-http://alink/123/987/01
-#EXTINF:-1 tvg-id="myseries01e01" tvg-name="myseries01e01" tvg-logo="" group-title="My Serie",My Serie s01e01
-http://alink/345/333/01.mkv
-#EXTINF:-1 tvg-id="myseries01e02" tvg-name="myseries01e02" tvg-logo="" group-title="My Serie",My Serie s01e02
-http://alink/345/333/02.mp4
+#PLAYLIST
+#EXTINF:-1 tvg-id="channel_1" tvg-name="Channel 1" tvg-logo="https://m3u.guillaumeferreira.com/channel_1" group-title="CHANNELS",Channel 1
+https://m3u.guillaumeferreira.com/channel_1
+#EXT-X tvg-id="channel_2" tvg-name="Channel 2" tvg-logo="https://m3u.guillaumeferreira.com/channel_2" group-title="CHANNELS",Channel 2
+https://m3u.guillaumeferreira.com/channel_2
+#EXTIMG
+#EXTINF:-1 tvg-id="channel_3" tvg-name="Channel 3" tvg-logo="https://m3u.guillaumeferreira.com/channel_3" group-title="CHANNELS",Channel 3
+https://m3u.guillaumeferreira.com/channel_3
+#EXTINF:-1 tvg-id="channel_4" tvg-name="Channel 4" tvg-logo="https://m3u.guillaumeferreira.com/channel_4" group-title="CHANNELS",Channel 4
+#EXTINF: tvg-id="channel_5.fr" tvg-name="Channel 5" tvg-logo="https://m3u.guillaumeferreira.com/channel_5" group-title="CHANNELS",Channel 5
+https://m3u.guillaumeferreira.com/channel_5
+#EXTINF:-1 tvg-id="channel_6" tvg-name="Channel 6" tvg-logo="https://m3u.guillaumeferreira.com/channel_6" group-title="CHANNELS",Channel 6
+https://m3u.guillaumeferreira.com/channel_6
+#EXTINF:-1 tvg-id="movie_1" tvg-name="Movie 1" tvg-logo="https://m3u.guillaumeferreira.com/movie_2" group-title="VOD",Movie 1
+https://m3u.guillaumeferreira.com/movie-2.mp4
+#EXTINF:-1 tvg-id="movie_2" tvg-name="Movie 2" tvg-logo="https://m3u.guillaumeferreira.com/movie_2" group-title="VOD",Movie 2
+https://m3u.guillaumeferreira.com/movie-2.mp4
+#EXTINF:32343 tvg-id="song_1" tvg-name="Song 1" tvg-logo="https://m3u.guillaumeferreira.com/song_1" group-title="SONGS",Song 1
+https://m3u.guillaumeferreira.com/song-1.mp3
+#EXTINF:48332 tvg-id="song_2" tvg-name="Song 2" tvg-logo="https://m3u.guillaumeferreira.com/song_2" group-title="SONGS",Song 2
+https://m3u.guillaumeferreira.com/song-2.mp3
+#EXTINF:43290 tvg-id="song_3" tvg-name="Song 3" tvg-logo="https://m3u.guillaumeferreira.com/song_3" group-title="SONGS",Song 3
+https://m3u.guillaumeferreira.com/song-3.mp3

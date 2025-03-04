@@ -5,11 +5,11 @@
       toggleable
       :header="$t('source.parsing_result.error')"
       :collapsed="false"
-      class="panel-error">
+      class="panel-error"
+    >
       <div v-for="(error, index) in errors" :key="index">
-        <span v-if="error.line"
-          class="line-label">
-          {{ $t('source.parsing_result.error_line', {line: error.line}) }}
+        <span v-if="error.line" class="line-label">
+          {{ $t("source.parsing_result.error_line", { line: error.line }) }}
         </span>
         <span>
           {{ $t(`source.parsing_result.error_key.${error.type}`) }}
@@ -21,27 +21,36 @@
       v-if="warnings?.length !== 0"
       toggleable
       :collapsed="true"
-      class="panel-warning">
+      class="panel-warning"
+    >
       <template #header>
         <div class="flex align-items-center">
-          {{ $tc('source.parsing_result.warning', {count: warnings?.length ?? 0}) }}
+          {{
+            $tc("source.parsing_result.warning", {
+              count: warnings?.length ?? 0,
+            })
+          }}
         </div>
       </template>
-      <div v-for="(warning, index) in warnings" :key="index">
-        <span v-if="warning.line"
-          class="line-label">
-          {{ $t('source.parsing_result.warning_line', {line: warning.line}) }}
-        </span>
-        <span>
-          {{ $t(`source.parsing_result.warning_key.${warning.type}`) }}
-        </span>
-      </div>
+      <template v-for="(warning, index) in warnings" :key="index">
+        <div>
+          <span v-if="warning.line" class="line-label">
+            {{
+              $t("source.parsing_result.warning_line", { line: warning.line })
+            }}
+          </span>
+          <span>
+            {{ $t(`source.parsing_result.warning_key.${warning.type}`) }}
+          </span>
+        </div>
+        <span class="additional-infos">{{ warning.additionalLabel }}</span>
+      </template>
     </Panel>
 
     <table class="processing-results-table">
       <tr v-if="records?.length !== 0">
         <th>
-          {{ $t('source.parsing_result.records_count') }}
+          {{ $t("source.parsing_result.records_count") }}
         </th>
         <td>
           {{ records?.length }}
@@ -49,7 +58,7 @@
       </tr>
       <tr v-if="mediaRecordsCount !== 0">
         <th>
-          {{ $t('source.parsing_result.media_count') }}
+          {{ $t("source.parsing_result.media_count") }}
         </th>
         <td>
           {{ mediaRecordsCount }}
@@ -57,7 +66,7 @@
       </tr>
       <tr v-if="liveRecordsCount !== 0">
         <th>
-          {{ $t('source.parsing_result.live_count') }}
+          {{ $t("source.parsing_result.live_count") }}
         </th>
         <td>
           {{ liveRecordsCount }}
@@ -65,7 +74,7 @@
       </tr>
       <tr v-if="vodRecordsCount !== 0">
         <th>
-          {{ $t('source.parsing_result.vod_count') }}
+          {{ $t("source.parsing_result.vod_count") }}
         </th>
         <td>
           {{ vodRecordsCount }}
@@ -74,40 +83,46 @@
     </table>
   </div>
 </template>
-  
+
 <script lang="ts">
 import { mapState } from "pinia";
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
 import { RecordTypeEnum } from "@/types/RecordsTypes";
 import { recordsStore } from "../../../stores/recordsStore";
 
 export default defineComponent({
   data() {
-      return { }
+    return {};
   },
   computed: {
-    ...mapState(recordsStore,
-      ['source',
-      'progressStatus',
-      'groupedRecords',
-      'records',
-      'isOnProcessing',
-      'errors',
-      'warnings'
+    ...mapState(recordsStore, [
+      "source",
+      "progressStatus",
+      "groupedRecords",
+      "records",
+      "isOnProcessing",
+      "errors",
+      "warnings",
     ]),
 
     liveRecordsCount(): number {
-      return this.records?.filter(record => record.type === RecordTypeEnum.LIVE).length;
+      return this.records?.filter(
+        (record) => record.type === RecordTypeEnum.LIVE
+      ).length;
     },
     mediaRecordsCount(): number {
-      return this.records?.filter(record => record.type === RecordTypeEnum.MEDIA).length;
+      return this.records?.filter(
+        (record) => record.type === RecordTypeEnum.MEDIA
+      ).length;
     },
     vodRecordsCount(): number {
-      return this.records?.filter(record => record.type === RecordTypeEnum.VOD).length;
-    }
+      return this.records?.filter(
+        (record) => record.type === RecordTypeEnum.VOD
+      ).length;
+    },
   },
   created() {},
-  methods: { }
+  methods: {},
 });
 </script>
 
@@ -156,6 +171,11 @@ export default defineComponent({
 
   .line-label {
     font-weight: 600;
+  }
+
+  .additional-infos {
+    font-size: 0.8rem;
+    color: var(--gray-600);
   }
 }
 </style>

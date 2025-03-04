@@ -1,10 +1,17 @@
 <template>
   <div class="selection-table-component container">
-    <h2>{{ $t('selection_table.selected_records') }}
+    <h2>
+      {{ $t("selection_table.selected_records") }}
       <span class="filters-count-label">
-        {{ $tc('common_tables.records_count', selectedGroupRecordsCount ?? 0, {count: selectedGroupRecordsCount ?? '0'}) }}
+        {{
+          $tc("common_tables.records_count", selectedGroupRecordsCount ?? 0, {
+            count: selectedGroupRecordsCount ?? "0",
+          })
+        }}
       </span>
     </h2>
+
+    <ImageComponent :imageSource="activeLogo" @closeImage="onCloseImage()" />
 
     <DataTable
       class="selection-datatable"
@@ -14,142 +21,156 @@
       :rows="20"
       :rowsPerPageOptions="[5, 10, 20, 50]"
       scrollable
-      scrollHeight="500px">
-    <template #empty>{{ $t('selection_table.no_result_selected') }}</template>
-    
-    <Column expander style="width: 4rem" />
-    <Column style="width: 4rem">
-      <template #header>
-        <Button
-        v-if="selectedGroupRecords?.length !== 0"
-        icon="pi pi-trash"
-        text
-        raised
-        @click="clearAllSelection()"></Button>
-      </template>
-      <template #body="slotProps">
-        <Button
-        icon="pi pi-trash"
-        text
-        raised
-        @click="unselectGroupRecord(slotProps.data)"></Button>
-      </template>
-    </Column>
-    <Column
-      field="groupTitle"
-      :header="$t('common_tables.group_name_column')"></Column>
-    <Column
-      :header="$t('common_tables.details_column')">
-      <template #body="slotProps">
-        {{ $t('selection_table.details_content', {recordsCount: slotProps.data.records?.length || 0}) }}
-      </template>
-    </Column>
-    <Column
-      field="type"
-      :header="$t('common_tables.type_column')">
-      <template #body="slotProps">
-        <Badge :value="slotProps.data.type"></Badge>
-      </template>
-    </Column>
-    
-    <template #expansion="slotProps">
-      <DataTable
-      :value="slotProps.data.records"
-      dataKey="name"
-      paginator
-      :rows="20"
-      :rowsPerPageOptions="[5, 10, 20, 50]"
-      class="expand-row-table"
-      scrollable
-      scrollHeight="300px">
+      scrollHeight="500px"
+    >
+      <template #empty>{{ $t("selection_table.no_result_selected") }}</template>
 
-      <template #empty>
-        {{ $t('common_tables.nothing_to_show') }}
-      </template>
-
-      <Column headerStyle="width: 3rem">  
+      <Column expander style="width: 4rem" />
+      <Column style="width: 4rem">
+        <template #header>
+          <Button
+            v-if="selectedGroupRecords?.length !== 0"
+            icon="pi pi-trash"
+            text
+            raised
+            @click="clearAllSelection()"
+          ></Button>
+        </template>
         <template #body="slotProps">
           <Button
-          icon="pi pi-trash"
-          text
-          raised
-          @click="unselectRecord(slotProps.data)"></Button>
+            icon="pi pi-trash"
+            text
+            raised
+            @click="unselectGroupRecord(slotProps.data)"
+          ></Button>
         </template>
       </Column>
-      
-      <Column
-        header="tvg-logo"
-        style="width: 80px">
-        <template #body="row">
-          <img v-if="row.data.tvgParameters?.tvgLogo"
-            :src="row.data.tvgParameters?.tvgLogo"
-            :alt="`Logo for ${row.data.tvgParameters?.tvgName}`"
-            class="tvg-logo-picture"/>
-          <div v-else
-            class="no-logo-symbol">
-            ?
-          </div>
-        </template>
-      </Column>
-      
-      <Column
-        field="name"
-        :header="$t('common_tables.name_column')"></Column>
-      <Column header="tvg-name">
-        <template #body="row">
-          {{ row.data.tvgParameters?.tvgName || '-' }}
-        </template>
-      </Column> 
       <Column
         field="groupTitle"
-        header="group-title"></Column>
-      <Column
-        field="type"
-        :header="$t('common_tables.type_column')">
+        :header="$t('common_tables.group_name_column')"
+      ></Column>
+      <Column :header="$t('common_tables.details_column')">
+        <template #body="slotProps">
+          {{
+            $t("selection_table.details_content", {
+              recordsCount: slotProps.data.records?.length || 0,
+            })
+          }}
+        </template>
+      </Column>
+      <Column field="type" :header="$t('common_tables.type_column')">
         <template #body="slotProps">
           <Badge :value="slotProps.data.type"></Badge>
         </template>
       </Column>
+
+      <template #expansion="slotProps">
+        <DataTable
+          :value="slotProps.data.records"
+          dataKey="name"
+          paginator
+          :rows="20"
+          :rowsPerPageOptions="[5, 10, 20, 50]"
+          class="expand-row-table"
+          scrollable
+          scrollHeight="300px"
+        >
+          <template #empty>
+            {{ $t("common_tables.nothing_to_show") }}
+          </template>
+
+          <Column headerStyle="width: 3rem">
+            <template #body="slotProps">
+              <Button
+                icon="pi pi-trash"
+                text
+                raised
+                @click="unselectRecord(slotProps.data)"
+              ></Button>
+            </template>
+          </Column>
+
+          <Column header="tvg-logo" style="width: 80px">
+            <template #body="row">
+              <template v-if="row.data.tvgParameters?.tvgLogo">
+                <img
+                  :src="row.data.tvgParameters?.tvgLogo"
+                  class="tvg-logo-picture"
+                  @click="selectActiveLogo(row.data.tvgParameters?.tvgLogo)"
+                />
+              </template>
+              <div v-else class="no-logo-symbol">?</div>
+            </template>
+          </Column>
+
+          <Column
+            field="name"
+            :header="$t('common_tables.name_column')"
+          ></Column>
+          <Column header="tvg-name">
+            <template #body="row">
+              {{ row.data.tvgParameters?.tvgName || "-" }}
+            </template>
+          </Column>
+          <Column field="groupTitle" header="group-title"></Column>
+          <Column field="type" :header="$t('common_tables.type_column')">
+            <template #body="slotProps">
+              <Badge :value="slotProps.data.type"></Badge>
+            </template>
+          </Column>
+        </DataTable>
+      </template>
     </DataTable>
-  </template>
-</DataTable>
-</div>
+  </div>
 </template>
 
 <script lang="ts">
-import { recordsStore } from '@/stores/recordsStore';
-import { mapState } from 'pinia';
-import { defineComponent } from 'vue';
-import { type Record } from '@/types/RecordsTypes';
-import type { GroupedRecords } from '@/types/GroupedRecordsTypes';
+import { recordsStore } from "@/stores/recordsStore";
+import { mapState } from "pinia";
+import { defineComponent } from "vue";
+import { type Record } from "@/types/RecordsTypes";
+import type { GroupedRecords } from "@/types/GroupedRecordsTypes";
+import ImageComponent from "@/components/common/ImageComponent.vue";
 
 export default defineComponent({
+  components: {
+    ImageComponent,
+  },
   data() {
     return {
       expandedRows: [] as any[],
+      activeLogo: null as string | null,
     };
   },
   computed: {
-    ...mapState(recordsStore, ['selectedGroupRecords']),
+    ...mapState(recordsStore, ["selectedGroupRecords"]),
 
     selectedGroupRecordsCount(): number {
       return this.selectedGroupRecords.reduce((totalCount, groupedRecord) => {
         return totalCount + groupedRecord.records.length;
       }, 0);
-    }
+    },
   },
-  created() { },
+  created() {},
   methods: {
     unselectRecord(record: Record) {
       recordsStore()?.removeRecordSelection(record);
     },
-    
+
     unselectGroupRecord(groupRecord: GroupedRecords) {
       recordsStore()?.removeGroupedRecordSelection(groupRecord);
     },
-    
+
     clearAllSelection() {
       recordsStore()?.clearAllSelection();
+    },
+
+    onCloseImage() {
+      this.activeLogo = null;
+    },
+    selectActiveLogo(logo: string) {
+      console.log(logo);
+      this.activeLogo = logo;
     },
   },
 });
@@ -169,7 +190,11 @@ export default defineComponent({
 
   .tvg-logo-picture {
     width: auto;
-    height: 30px;
+    height: 44px;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   .no-logo-symbol {
@@ -183,7 +208,7 @@ export default defineComponent({
     align-items: center;
     justify-content: center;
   }
-  
+
   .expand-row-table {
     z-index: 0;
     border: 1px solid #f2f2f2;
