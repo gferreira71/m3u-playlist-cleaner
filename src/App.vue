@@ -5,23 +5,6 @@
         <span class="app-title" @click="$router.push('/')">
           m<span class="app-title-three">3</span>u playlist cleaner
         </span>
-
-        <div class="menu">
-          <div
-            class="menu-item"
-            :class="{ active: isToolPageActive }"
-            @click="$router.push('/tool')"
-          >
-            Tool
-          </div>
-          <div
-            class="menu-item"
-            :class="{ active: isManualPageActive }"
-            @click="$router.push('/manual')"
-          >
-            Manual
-          </div>
-        </div>
       </div>
       <div class="header-right">
         <div class="lang-selector">
@@ -69,7 +52,6 @@ import { defineComponent } from "vue";
 import { recordsStore } from "./stores/recordsStore";
 import LoadingComponent from "./components/global/LoadingComponent.vue";
 import LangService from "./services/LangService";
-import { useRoute } from "vue-router";
 
 export enum LangEnum {
   EN = "en",
@@ -88,16 +70,6 @@ export default defineComponent({
   },
   computed: {
     ...mapState(recordsStore, ["isViewLoaded"]),
-    path() {
-      const route = useRoute();
-      return route.path;
-    },
-    isToolPageActive() {
-      return this.path === "/tool";
-    },
-    isManualPageActive() {
-      return this.path === "/manual";
-    },
   },
   created() {
     this.initLang();
@@ -161,32 +133,6 @@ header {
         font-style: italic;
         font-weight: bold;
         font-size: 20px;
-      }
-    }
-
-    .menu {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-
-      .menu-item {
-        align-items: center;
-        display: flex;
-        padding: 0 12px;
-        height: 50px;
-        cursor: pointer;
-        text-transform: uppercase;
-        font-weight: 400;
-
-        &:hover {
-          color: blue;
-          background-color: #eaeaea;
-        }
-
-        &.active {
-          color: blue;
-          background-color: #eaeaea;
-        }
       }
     }
   }

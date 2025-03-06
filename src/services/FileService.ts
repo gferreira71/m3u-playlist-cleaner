@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-  baseURL: "http://localhost:3001",
+  baseURL: import.meta.env.VITE_API_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -9,7 +9,10 @@ const apiClient = axios.create({
 
 export async function isServerUp(): Promise<boolean> {
   try {
-    await apiClient.get("/health");
+    const response = await apiClient.get("/health");
+    if (response.status !== 200 || response.data !== "OK") {
+      return false;
+    }
     return true;
   } catch (error) {
     return false;

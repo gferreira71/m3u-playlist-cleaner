@@ -7,16 +7,19 @@
     "name": "gferreira71"
   },
   "scripts": {
-    "dev": "vite",
-    "build": "run-p type-check \"build-only {@}\" --",
+    "dev": "vite --mode development",
+    "build-dev": "run-s type-check build-dev-only",
+    "build": "run-s type-check build-prod-only",
     "preview": "vite preview",
-    "build-only": "vite build",
+    "build-dev-only": "vite build --mode development",
+    "build-prod-only": "vite build --mode production",
     "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/"
   },
   "dependencies": {
     "axios": "^1.7.7",
+    "cross-env": "^7.0.3",
     "pinia": "^2.1.7",
     "primeflex": "^3.3.1",
     "primeicons": "^6.0.1",
