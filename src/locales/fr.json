@@ -5,7 +5,7 @@
   },
   "source": {
     "download_m3u_fil_from_url": "Télécharger un fichier .m3u depuis une URL",
-    "upload_m3u_file": "Téléverser un fichier .m3u",
+    "upload_m3u_file": "Télécharger un fichier .m3u",
     "download_not_available": "Téléchargement non disponible",
     "favorite_table": {
       "name": "Nom",
